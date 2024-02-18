@@ -1,1 +1,49 @@
 import request from '@/utils/request'
+
+export function getClubList(data) {
+  return request({
+    url: '/api/club/list',
+    method: 'post',
+    data
+  })
+}
+
+export function saveOrUpdateClub(data) {
+  return request({
+    url: '/api/club/save',
+    method: 'post',
+    data
+  })
+}
+
+export function modifyClubStatus(data) {
+  return request({
+    url: '/api/club/status',
+    method: 'post',
+    data
+  })
+}
+
+export function removeClub(data) {
+  return request({
+    url: '/api/club/remove',
+    method: 'delete',
+    params: data
+  })
+}
+
+export function getClubBalance(data) {
+  return request({
+    url: '/api/club/balance',
+    method: 'post',
+    data
+  })
+}
+
+export function removeClubUser(data) {
+  return request({
+    url: '/api/clubUser/remove',
+    method: 'post',
+    data
+  })
+}

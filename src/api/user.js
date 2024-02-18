@@ -39,3 +39,36 @@ export function getUserList(data) {
     data
   })
 }
+
+export function modifyUserStatus(data) {
+  return request({
+    url: '/api/user/status',
+    method: 'post',
+    data
+  })
+}
+
+export function removeUser(data) {
+  return request({
+    url: '/api/user/remove',
+    method: 'delete',
+    params: data
+  })
+}
+
+export function modifyUserRole(data) {
+  return request({
+    url: '/api/user/modifyRole',
+    method: 'post',
+    data
+  })
+}
+
+export function getClubUser(data) {
+  return request({
+    url: '/api/club/getUser',
+    method: 'post',
+    data
+  })
+}
+

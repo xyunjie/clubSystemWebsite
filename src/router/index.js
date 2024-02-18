@@ -82,16 +82,51 @@ export const constantRoutes = [
       }
     ]
   },
-
   {
     path: '/admin/user',
     component: Layout,
+    redirect: '/admin/user/student',
+    name: '用户管理',
+    meta: {
+      title: '用户管理',
+      icon: 'user'
+    },
     children: [
       {
-        path: 'index',
+        path: 'student',
         name: 'adminUser',
-        component: () => import('@/views/admin/user.vue'),
+        component: () => import('@/views/admin/student.vue'),
         meta: { title: '学生管理', icon: 'user' }
+      },
+      {
+        path: 'clubAdmin',
+        name: 'adminClubAdmin',
+        component: () => import('@/views/admin/clubAdmin.vue'),
+        meta: { title: '社团管理员管理', icon: 'user' }
+      }
+    ]
+  },
+  {
+    path: '/admin/club',
+    component: Layout,
+    redirect: '/admin/club',
+    name: '社团/组织管理',
+    meta: {
+      title: '社团/组织管理',
+      icon: 'el-icon-s-home'
+    },
+    children: [
+      {
+        path: 'club',
+        name: 'clubAdmin',
+        component: () => import('@/views/club/club.vue'),
+        meta: { title: '社团管理', icon: 'el-icon-help' }
+      },
+      {
+        path: 'clubAdmin',
+        name: 'clubNotice',
+        component: () => import('@/views/club/clubNotice.vue'),
+        meta: { title: '社团公告', icon: 'user' }
       }
     ]
   },
