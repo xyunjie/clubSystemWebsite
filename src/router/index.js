@@ -123,10 +123,16 @@ export const constantRoutes = [
         meta: { title: '社团管理', icon: 'el-icon-help' }
       },
       {
-        path: 'clubAdmin',
+        path: 'clubNotice',
         name: 'clubNotice',
         component: () => import('@/views/club/clubNotice.vue'),
         meta: { title: '社团公告', icon: 'user' }
+      },
+      {
+        path: 'clubActivity',
+        name: 'clubActivity',
+        component: () => import('@/views/club/clubActivity.vue'),
+        meta: { title: '社团公告', icon: 'el-icon-trophy' }
       }
     ]
   },
