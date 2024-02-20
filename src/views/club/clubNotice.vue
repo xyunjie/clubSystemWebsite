@@ -100,15 +100,14 @@
       >
         <template v-slot:default="{ row }">
           <el-button v-if="row.status !== 1" type="success" @click="onHandleUser(row.id, 1)">通过</el-button>
-          <el-button v-if="row.status === 1" type="warning" @click="onHandleUser(row.id, 2)">禁用</el-button>
-<!--          <el-button type="info" @click="onCloseRole(row.id, 'user')">取消权限</el-button>-->
+          <el-button v-if="row.status === 1  || row.status === 0" type="warning" @click="onHandleUser(row.id, 2)">驳回</el-button>
           <el-popconfirm
             style="margin-left: 0.7rem"
             confirm-button-text="删除"
             cancel-button-text="取消"
             icon="el-icon-info"
             icon-color="red"
-            title="你确定要删除该通知吗？"
+            title="你确定要删除该公告吗？"
             @confirm="onRemove(row.id)"
           >
             <el-button slot="reference" type="danger">删除公告</el-button>

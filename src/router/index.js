@@ -132,7 +132,7 @@ export const constantRoutes = [
         path: 'clubActivity',
         name: 'clubActivity',
         component: () => import('@/views/club/clubActivity.vue'),
-        meta: { title: '社团公告', icon: 'el-icon-trophy' }
+        meta: { title: '社团活动', icon: 'el-icon-trophy' }
       }
     ]
   },
