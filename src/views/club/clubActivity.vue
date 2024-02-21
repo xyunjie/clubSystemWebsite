@@ -10,7 +10,7 @@
         </el-form-item>
       </el-form>
     </div>
-    <div style="" v-if="false">
+    <div v-if="false" style="">
       <div style="float: right; margin-bottom: 0.5rem">
         <el-button style="" type="primary" @click="onAddClubAdmin">新增</el-button>
         <el-button style="" type="primary" @click="onExport">导出</el-button>
@@ -112,7 +112,8 @@
       >
         <template v-slot:default="{ row }">
           <el-button v-if="row.status !== 1" type="success" @click="onHandleUser(row.id, 1)">通过</el-button>
-          <el-button v-if="row.status === 1 || row.status === 0" type="warning" @click="onHandleUser(row.id, 2)">驳回</el-button>
+          <el-button v-if="row.status === 1 || row.status === 0" type="warning" @click="onHandleUser(row.id, 2)">驳回
+          </el-button>
           <el-button type="success" @click="onShowActivityUser(row.id)">查看人员</el-button>
           <el-popconfirm
             style="margin-left: 0.7rem"
@@ -136,33 +137,103 @@
       @current-change="handleCurrentChange"
     />
     <el-dialog
-      title="添加社团管理员"
+      title="活动参与人员"
       :visible.sync="dialogVisible"
-      width="30%"
+      width="70%"
       :before-close="handleClose"
     >
-      <el-select v-model="selectUser" filterable placeholder="请选择" style="width: 100%">
-        <el-option
-          v-for="item in addClubAdminOption"
-          :key="item.id"
-          :label="item.name"
-          :value="item.id"
+      <el-table
+        :data="activityUserList"
+        border
+        style="width: 100%"
+      >
+        <el-table-column
+          fixed
+          prop="user.name"
+          label="姓名"
+          width="150"
+          align="center"
         />
-      </el-select>
+        <el-table-column
+          prop="user.studentId"
+          label="学号/账号"
+          width="140"
+          align="center"
+        />
+        <el-table-column
+          prop="user.collegeName"
+          label="学院"
+          width="140"
+          align="center"
+        />
+        <el-table-column
+          prop="user.majorName"
+          label="专业"
+          width="140"
+          align="center"
+        />
+        <el-table-column
+          prop="clazzName"
+          label="班级"
+          width="180"
+          align="center"
+        />
+        <el-table-column
+          prop="user.sexName"
+          label="性别"
+          width="120"
+          align="center"
+        />
+        <el-table-column
+          prop="status"
+          label="状态"
+          width="120"
+          align="center"
+        >
+          <template v-slot:default="{row}">
+            <el-tag v-if="row.status === 1" type="success">审核通过</el-tag>
+            <el-tag v-if="row.status === 0" type="warning">待审核</el-tag>
+            <el-tag v-if="row.status === 2" type="danger">未通过</el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column
+          prop="createdTime"
+          label="报名时间"
+          width="200"
+          align="center"
+        />
+        <el-table-column
+          fixed="right"
+          label="操作"
+          width="240"
+          align="center"
+        >
+          <template v-slot:default="{row}">
+            <el-button v-if="row.status !== 1" size="small" type="success" @click="handleActivityUserClick(row, 1)">通过
+            </el-button>
+            <el-button v-if="row.status !== 2" size="small" type="warning" @click="handleActivityUserClick(row, 2)">驳回</el-button>
+            <el-button size="small" type="danger" @click="handleRemoveActivityUser(row)">删除</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="handleClose">取 消</el-button>
-        <el-button type="primary" @click="saveAddClubAdmin">确 定</el-button>
+        <el-button @click="handleClose">关 闭</el-button>
       </span>
     </el-dialog>
   </div>
 </template>
 
 <script>
-import { getUserList, modifyUserRole } from '@/api/user'
 import { getDictListByGrade } from '@/api/dict'
 import axios from 'axios'
 import { getToken } from '@/utils/auth'
-import { getActivityList, modifyActivityStatus, removeActivity } from '@/api/activity'
+import {
+  getActivityList,
+  getActivityUserList,
+  modifyActivityStatus,
+  modifyActivityUserEntry,
+  removeActivity, removeActivityUserEntry
+} from '@/api/activity'
 
 export default {
   data() {
@@ -174,12 +245,16 @@ export default {
         kind: 'activity',
         query: ''
       },
+      activityUserListParam: {
+        pageNumber: 1,
+        pageSize: 10,
+        activityId: null
+      },
       tableData: [],
       total: 0,
       treeOption: [],
-      dialogVisible: false,
-      selectUser: null,
-      addClubAdminOption: []
+      activityUserList: [],
+      dialogVisible: false
     }
   },
   created() {
@@ -225,29 +300,28 @@ export default {
         this.getList(this.pageParam.pageNumber)
       })
     },
-    onAddClubAdmin() {
-      this.dialogVisible = true
-      getUserList({ pageNumber: 1, pageSize: 10000, role: 'user' }).then(res => {
-        this.addClubAdminOption = res.data.records
-      })
-      console.log(this.addClubAdminOption)
-    },
     handleClose() {
       this.dialogVisible = false
       this.selectUser = null
     },
     onShowActivityUser(val) {
-      console.log(val)
-    },
-    saveAddClubAdmin() {
-      // 添加
-      modifyUserRole({ id: this.selectUser, role: 'clubAdmin' }).then(res => {
-        this.getList(this.pageParam.pageNumber)
-        this.$message.success(`'设为社团管理员成功`)
+      this.activityUserListParam.activityId = val
+      getActivityUserList(this.activityUserListParam).then(res => {
+        this.dialogVisible = true
+        this.activityUserList = res.data.records
+        console.log(res)
       })
-      this.getList(this.pageParam.pageNumber)
-      this.dialogVisible = false
-      this.selectUser = null
+    },
+    handleActivityUserClick(val, status) {
+      modifyActivityUserEntry({ id: val.id, status: status }).then(res => {
+        console.log(res)
+        this.onShowActivityUser(val.activityId)
+      })
+    },
+    handleRemoveActivityUser(val) {
+      removeActivityUserEntry({ id: val.id }).then(res => {
+        this.onShowActivityUser(val.activityId)
+      })
     },
     onExport() {
       const token = getToken()

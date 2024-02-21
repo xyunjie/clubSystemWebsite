@@ -23,3 +23,27 @@ export function removeActivity(data) {
     params: data
   })
 }
+
+export function getActivityUserList(data) {
+  return request({
+    url: '/api/activity/user/list',
+    method: 'post',
+    data
+  })
+}
+
+export function modifyActivityUserEntry(data) {
+  return request({
+    url: '/api/activity/entry/status',
+    method: 'post',
+    data
+  })
+}
+
+export function removeActivityUserEntry(data) {
+  return request({
+    url: '/api/activity/entry/remove',
+    method: 'delete',
+    params: data
+  })
+}
