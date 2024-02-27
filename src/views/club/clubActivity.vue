@@ -319,7 +319,7 @@ export default {
       })
     },
     handleRemoveActivityUser(val) {
-      removeActivityUserEntry({ id: val.id }).then(res => {
+      removeActivityUserEntry({ id: val.id }).then(() => {
         this.onShowActivityUser(val.activityId)
       })
     },

@@ -83,9 +83,9 @@ export const constantRoutes = [
     ]
   },
   {
-    path: '/admin/user',
+    path: '/adminUser',
     component: Layout,
-    redirect: '/admin/user/student',
+    redirect: '/adminUser/student',
     name: '用户管理',
     meta: {
       title: '用户管理',
@@ -107,9 +107,9 @@ export const constantRoutes = [
     ]
   },
   {
-    path: '/admin/club',
+    path: '/adminClub',
     component: Layout,
-    redirect: '/admin/club',
+    redirect: '/adminClub/club',
     name: '社团/组织管理',
     meta: {
       title: '社团/组织管理',
@@ -133,10 +133,45 @@ export const constantRoutes = [
         name: 'clubActivity',
         component: () => import('@/views/club/clubActivity.vue'),
         meta: { title: '社团活动', icon: 'el-icon-trophy' }
+      },
+      {
+        path: 'clubWarning',
+        name: 'clubWarning',
+        component: () => import('@/views/club/clubWarning.vue'),
+        meta: { title: '警告信息', icon: 'el-icon-warning' }
       }
     ]
   },
-
+  {
+    path: '/adminSystem',
+    component: Layout,
+    redirect: '/adminSystem/system',
+    name: '系统管理',
+    meta: {
+      title: '系统管理',
+      icon: 'el-icon-s-home'
+    },
+    children: [
+      {
+        path: 'system',
+        name: 'systemAdmin',
+        component: () => import('@/views/club/club.vue'),
+        meta: { title: '系统管理', icon: 'el-icon-help' }
+      },
+      {
+        path: 'organization',
+        name: 'organizationAdmin',
+        component: () => import('@/views/club/club.vue'),
+        meta: { title: '组织架构管理', icon: 'el-icon-help' }
+      },
+      {
+        path: 'announcement',
+        name: 'announcementAdmin',
+        component: () => import('@/views/club/club.vue'),
+        meta: { title: '系统公告', icon: 'el-icon-help' }
+      }
+    ]
+  },
   {
     path: '/nested',
     component: Layout,

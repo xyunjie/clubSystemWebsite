@@ -1,5 +1,13 @@
 import request from '@/utils/request'
 
+export function saveOrUpdateActivity(data) {
+  return request({
+    url: '/api/activity/save',
+    method: 'post',
+    data
+  })
+}
+
 export function getActivityList(data) {
   return request({
     url: '/api/activity/list',

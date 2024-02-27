@@ -47,3 +47,10 @@ export function removeClubUser(data) {
     data
   })
 }
+
+export function getAllClub() {
+  return request({
+    url: '/api/club/all',
+    method: 'get'
+  })
+}

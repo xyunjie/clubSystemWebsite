@@ -128,6 +128,7 @@
         注册账号
       </el-button>
     </el-form>
+    <div style="height: 200px"></div>
   </div>
 </template>
 
