@@ -155,13 +155,13 @@ export const constantRoutes = [
       {
         path: 'system',
         name: 'systemAdmin',
-        component: () => import('@/views/club/club.vue'),
+        component: () => import('@/views/system/systemAdmin.vue'),
         meta: { title: '系统管理', icon: 'el-icon-help' }
       },
       {
         path: 'organization',
         name: 'organizationAdmin',
-        component: () => import('@/views/club/club.vue'),
+        component: () => import('@/views/system/organizationAdmin.vue'),
         meta: { title: '组织架构管理', icon: 'el-icon-help' }
       },
       {

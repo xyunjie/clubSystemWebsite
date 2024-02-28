@@ -14,3 +14,18 @@ export function getDictListByGrade(data) {
     params: data
   })
 }
+export function saveDict(data) {
+  return request({
+    url: '/api/dict/saveOrUpdate',
+    method: 'post',
+    data
+  })
+}
+
+export function removeDict(data) {
+  return request({
+    url: '/api/dict/remove',
+    method: 'delete',
+    params: data
+  })
+}
