@@ -1,11 +1,42 @@
 <template>
   <div>
-    <el-card style="width: 300px;">
-      <div style="text-align: right">
-        <el-button type="primary" size="mini" @click="addDeptDialog = true">新增</el-button>
-      </div>
-      <el-tree :data="data" :props="defaultProps" @node-click="handleNodeClick" />
-    </el-card>
+    <div style="display: flex; width: 100%;">
+      <el-card style="width: 300px;">
+        <div style="text-align: right">
+          <el-button type="primary" size="mini" @click="addDeptDialog = true">新增</el-button>
+        </div>
+        <el-tree :data="data" :props="defaultProps" @node-click="handleNodeClick" />
+      </el-card>
+      <el-card style="display: flex; flex-grow: 1; margin-left: 10px;">
+        <template #header>
+          <div style="font-weight: bold; font-size: 22px; display: block; width: 100%;">部门编辑</div>
+        </template>
+        <el-form label-width="100px" inline>
+          <el-form-item label="上级部门" style="width: 100%">
+            <el-cascader
+              v-model="deptEdit.parentDeptId"
+              clearable
+              placeholder="请选择筛选条件！"
+              :options="data"
+              :props="{
+                checkStrictly: true,
+                value: 'id',
+                label: 'name',
+                children: 'children'
+              }"
+            />
+          </el-form-item>
+          <el-form-item label="名称">
+            <el-input v-model="deptEdit.name"></el-input>
+          </el-form-item>
+        </el-form>
+        <div style="text-align: right;">
+          <el-button size="medium" type="danger">删除</el-button>
+          <el-button size="medium" type="primary">保存</el-button>
+        </div>
+      </el-card>
+    </div>
+
     <el-dialog :visible.sync="addDeptDialog">
       <el-form inline label-width="80px">
         <el-form-item label="上级部门" style="width: 100%;">
@@ -49,6 +80,10 @@ export default {
         parentDeptId: [],
         name: '',
         desc: ''
+      },
+      deptEdit: {
+        parentDeptId: [],
+        name: ''
       },
       defaultProps: {
         children: 'children',
