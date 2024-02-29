@@ -1,9 +1,16 @@
 <template>
   <el-card class="box-card" style="height: 100%">
     <el-tabs v-model="activeName" @tab-click="handleClick">
-      <el-tab-pane label="轮播图" name="carousel">轮播图</el-tab-pane>
-      <el-tab-pane label="关于我们" name="about">关于我们</el-tab-pane>
-      <el-tab-pane label="系统简介" name="introduction">系统简介</el-tab-pane>
+      <el-tab-pane label="关于我们" name="about">
+        <div style="padding: 20px">
+          {{ systemInfo.about }}
+        </div>
+      </el-tab-pane>
+      <el-tab-pane label="系统简介" name="introduction">
+        <div style="padding: 20px">
+          {{ systemInfo.introduction }}
+        </div>
+      </el-tab-pane>
     </el-tabs>
   </el-card>
 </template>
@@ -12,7 +19,11 @@ export default {
   name: 'SystemAdmin',
   data() {
     return {
-      activeName: 'carousel'
+      activeName: 'about',
+      systemInfo: {
+        about: '关于我们',
+        introduction: '系统简介'
+      }
     }
   },
   methods: {
