@@ -22,17 +22,27 @@
                 checkStrictly: true,
                 value: 'id',
                 label: 'name',
-                children: 'children'
+                children: 'children',
               }"
             />
           </el-form-item>
+          <el-form-item label="年级" style="width: 100%;">
+            <el-select v-model="deptEdit.grade" placeholder="请选择年级">
+              <el-option
+                v-for="item in options"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id"
+              />
+            </el-select>
+          </el-form-item>
           <el-form-item label="名称">
-            <el-input v-model="deptEdit.name"></el-input>
+            <el-input v-model="deptEdit.name" placeholder="请输入名称" />
           </el-form-item>
         </el-form>
         <div style="text-align: right;">
-          <el-button size="medium" type="danger">删除</el-button>
-          <el-button size="medium" type="primary">保存</el-button>
+          <el-button size="medium" type="danger" @click="handlerDelete">删除</el-button>
+          <el-button size="medium" type="primary" @click="handlerSave">保存</el-button>
         </div>
       </el-card>
     </div>
@@ -53,6 +63,16 @@
             }"
           />
         </el-form-item>
+        <el-form-item label="年级" style="width: 100%;">
+          <el-select v-model="addDeptForm.grade" placeholder="请选择年级">
+            <el-option
+              v-for="item in options"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            />
+          </el-select>
+        </el-form-item>
         <el-form-item label="名称" style="width: 100%;">
           <el-input v-model="addDeptForm.name" />
         </el-form-item>
@@ -69,7 +89,7 @@
 </template>
 
 <script>
-import { getDictList, saveDict } from '@/api/dict'
+import { getDictList, removeDict, saveDict } from '@/api/dict'
 
 export default {
   data() {
@@ -88,11 +108,13 @@ export default {
       defaultProps: {
         children: 'children',
         label: 'name'
-      }
+      },
+      options: []
     }
   },
   created() {
     this.loadPage()
+    this.getGradeOption()
   },
   methods: {
     handleAddDept() {
@@ -108,15 +130,70 @@ export default {
         this.data = res.data
       })
     },
+    getGradeOption() {
+      getDictList({
+        isGrade: true
+      }).then(res => {
+        this.options = res.data
+      })
+    },
     addDeptSubmit() {
       saveDict({
         parentId: this.addDeptForm.parentDeptId[this.addDeptForm.parentDeptId.length - 1],
         name: this.addDeptForm.name,
         isGrade: false,
+        grade: this.addDeptForm.grade,
         description: this.addDeptForm.desc
       }).then(res => {
         this.addDeptDialog = false
         this.loadPage()
+      })
+    },
+    handleNodeClick(val, node) {
+      console.log(val)
+      this.deptEdit.name = val.name
+      this.deptEdit.id = val.id
+      this.deptEdit.grade = val.grade
+      this.deptEdit.parentDeptId = this.getIdList(node).map(i => i.id)
+    },
+    getIdList(node) {
+      const list = []
+      list.unshift({
+        id: node.data.id,
+        name: node.data.name
+      })
+      while (node.data.parentId) {
+        node = node.parent
+        list.unshift({
+          id: node.data.id,
+          name: node.data.name
+        })
+      }
+      list.pop()
+      return list
+    },
+    handlerDelete() {
+      removeDict({ id: this.deptEdit.id }).then(() => {
+        this.loadPage()
+        this.deptEdit = {
+          parentDeptId: [],
+          name: ''
+        }
+      })
+    },
+    handlerSave() {
+      saveDict({
+        id: this.deptEdit.id,
+        parentId: this.deptEdit.parentDeptId[this.deptEdit.parentDeptId.length - 1],
+        name: this.deptEdit.name,
+        grade: this.deptEdit.grade,
+        isGrade: false
+      }).then(() => {
+        this.loadPage()
+        this.deptEdit = {
+          parentDeptId: [],
+          name: ''
+        }
       })
     }
   }

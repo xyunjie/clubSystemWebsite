@@ -167,7 +167,7 @@ export const constantRoutes = [
       {
         path: 'announcement',
         name: 'announcementAdmin',
-        component: () => import('@/views/club/club.vue'),
+        component: () => import('@/views/system/systemNotice.vue'),
         meta: { title: '系统公告', icon: 'el-icon-help' }
       }
     ]
