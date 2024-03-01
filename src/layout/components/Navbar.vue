@@ -28,6 +28,19 @@
         </el-dropdown-menu>
       </el-dropdown>
     </div>
+
+    <el-dialog
+      title="提示"
+      :visible.sync="dialogVisible"
+      width="30%"
+      :before-close="handleClose"
+    >
+      <span>这是一段信息</span>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -41,11 +54,14 @@ export default {
     Breadcrumb,
     Hamburger
   },
-  computed: {
-    ...mapGetters([
-      'sidebar',
-      'avatar'
-    ])
+  data() {
+    return {
+      ...mapGetters([
+        'sidebar',
+        'avatar'
+      ]),
+      dialogVisible: false
+    }
   },
   methods: {
     toggleSideBar() {
@@ -56,10 +72,13 @@ export default {
       this.$router.push(`/login?redirect=${this.$route.fullPath}`)
     },
     toCenter() {
-      this.$message.error('功能尚未实现，敬请期待')
+      this.dialogVisible = true
     },
     modifyPassword() {
       this.$message.error('功能尚未实现，敬请期待')
+    },
+    handleClose() {
+      this.dialogVisible = false
     }
   }
 }
