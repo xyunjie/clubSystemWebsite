@@ -60,12 +60,18 @@ export const constantRoutes = [
       meta: { title: 'Dashboard', icon: 'dashboard' }
     }]
   },
+  // 404 page must be placed at the end !!!
+  { path: '*', redirect: '/404', hidden: true }
+]
+
+export const asyncRoutes = [
   {
     path: '/adminUser',
     component: Layout,
     redirect: '/adminUser/student',
     name: '用户管理',
     meta: {
+      roles: ['admin'],
       title: '用户管理',
       icon: 'user'
     },
@@ -149,9 +155,7 @@ export const constantRoutes = [
         meta: { title: '系统公告', icon: 'el-icon-help' }
       }
     ]
-  },
-  // 404 page must be placed at the end !!!
-  { path: '*', redirect: '/404', hidden: true }
+  }
 ]
 
 const createRouter = () => new Router({

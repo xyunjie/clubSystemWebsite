@@ -34,7 +34,7 @@
           auto-complete="on"
         />
         <span class="show-pwd" @click="showPwd">
-          <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'"/>
+          <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
         </span>
       </el-form-item>
       <el-form-item prop="name" label="姓名">
@@ -107,7 +107,7 @@
         <el-input
           ref="weChat"
           v-model="registerForm.weChat"
-          placeholder="请输入手机号"
+          placeholder="请输入微信号"
           name="weChat"
           type="text"
           tabindex="1"
@@ -128,7 +128,7 @@
         注册账号
       </el-button>
     </el-form>
-    <div style="height: 200px"></div>
+    <div style="height: 200px" />
   </div>
 </template>
 

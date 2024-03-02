@@ -72,3 +72,18 @@ export function getClubUser(data) {
   })
 }
 
+export function updateInfo(data) {
+  return request({
+    url: '/api/account/update',
+    method: 'post',
+    data
+  })
+}
+
+export function changePassword(data) {
+  return request({
+    url: '/api/account/changePassword',
+    method: 'post',
+    data
+  })
+}
