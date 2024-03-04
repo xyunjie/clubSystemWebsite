@@ -59,9 +59,7 @@ export const constantRoutes = [
       component: () => import('@/views/dashboard/index'),
       meta: { title: 'Dashboard', icon: 'dashboard' }
     }]
-  },
-  // 404 page must be placed at the end !!!
-  { path: '*', redirect: '/404', hidden: true }
+  }
 ]
 
 export const asyncRoutes = [
@@ -71,7 +69,7 @@ export const asyncRoutes = [
     redirect: '/adminUser/student',
     name: '用户管理',
     meta: {
-      roles: ['admin'],
+      roles: ['admin', 'clubAdmin'],
       title: '用户管理',
       icon: 'user'
     },
@@ -94,8 +92,10 @@ export const asyncRoutes = [
     path: '/adminClub',
     component: Layout,
     redirect: '/adminClub/club',
+    alwaysShow: true,
     name: '社团/组织管理',
     meta: {
+      roles: ['admin', 'clubAdmin'],
       title: '社团/组织管理',
       icon: 'el-icon-s-home'
     },
@@ -132,6 +132,7 @@ export const asyncRoutes = [
     redirect: '/adminSystem/system',
     name: '系统管理',
     meta: {
+      roles: ['admin', 'clubAdmin'],
       title: '系统管理',
       icon: 'el-icon-s-home'
     },
@@ -155,7 +156,83 @@ export const asyncRoutes = [
         meta: { title: '系统公告', icon: 'el-icon-help' }
       }
     ]
-  }
+  },
+  {
+    path: '/my',
+    component: Layout,
+    redirect: '/my/club',
+    name: '我的社团',
+    meta: {
+      roles: ['admin', 'clubAdmin', 'user'],
+      title: '我的社团',
+      icon: 'el-icon-s-home'
+    },
+    children: [
+      {
+        path: 'club',
+        name: 'myClub',
+        component: () => import('@/views/system/systemAdmin.vue'),
+        meta: { title: '社团列表', icon: 'el-icon-help' }
+      },
+      {
+        path: 'announcement',
+        name: 'clubAnnouncement',
+        component: () => import('@/views/system/organizationAdmin.vue'),
+        meta: { title: '社团公告', icon: 'el-icon-help' }
+      },
+      {
+        path: 'finance',
+        name: 'clubFinance',
+        component: () => import('@/views/system/systemNotice.vue'),
+        meta: { title: '社团财务', icon: 'el-icon-help' }
+      },
+      {
+        path: 'admin',
+        name: 'myClubAdmin',
+        component: () => import('@/views/system/systemNotice.vue'),
+        meta: { title: '管理我的社团', icon: 'el-icon-help' }
+      },
+      {
+        path: 'warning',
+        name: 'myClubWarning',
+        component: () => import('@/views/system/systemNotice.vue'),
+        meta: { title: '社团警告', icon: 'el-icon-help' }
+      }
+    ]
+  },
+  {
+    path: '/activity',
+    component: Layout,
+    redirect: '/activity/list',
+    name: '社团活动',
+    meta: {
+      roles: ['admin', 'clubAdmin', 'user'],
+      title: '社团活动',
+      icon: 'el-icon-s-home'
+    },
+    children: [
+      {
+        path: 'list',
+        name: 'activityList',
+        component: () => import('@/views/system/systemAdmin.vue'),
+        meta: { title: '活动列表', icon: 'el-icon-help' }
+      },
+      {
+        path: 'application',
+        name: 'activityApplication',
+        component: () => import('@/views/system/organizationAdmin.vue'),
+        meta: { title: '报名管理', icon: 'el-icon-help' }
+      },
+      {
+        path: 'wonderful',
+        name: 'activityWonderful',
+        component: () => import('@/views/system/systemNotice.vue'),
+        meta: { title: '精彩瞬间', icon: 'el-icon-help' }
+      }
+    ]
+  },
+  // 404 page must be placed at the end !!!
+  { path: '*', redirect: '/404', hidden: true }
 ]
 
 const createRouter = () => new Router({

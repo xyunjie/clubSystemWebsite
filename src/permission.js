@@ -21,23 +21,18 @@ router.beforeEach(async(to, from, next) => {
   const hasToken = getToken()
 
   if (hasToken) {
-    console.log('123')
     if (to.path === '/login') {
-      console.log('789')
       // if is logged in, redirect to the home page
       next({ path: '/' })
       NProgress.done()
     } else {
-      console.log('910')
-      await store.dispatch('user/getInfo')
       const hasRoles = store.getters.roles && store.getters.roles.length > 0
-      console.log(hasRoles)
       if (hasRoles) {
         next()
       } else {
-        console.log('222')
         try {
           // get user info
+          await store.dispatch('user/getInfo')
           // note: roles must be a object array! such as: ['admin'] or ,['developer','editor']
           const roles = store.getters.roles
           // generate accessible routes map based on roles
@@ -58,7 +53,6 @@ router.beforeEach(async(to, from, next) => {
       }
     }
   } else {
-    console.log('456')
     if (whiteList.indexOf(to.path) !== -1) {
       // in the free login whitelist, go directly
       next()
