@@ -23,6 +23,9 @@ const mutations = {
   SET_NAME: (state, name) => {
     state.name = name
   },
+  SET_USER_ID: (state, id) => {
+    state.userId = id
+  },
   SET_AVATAR: (state, avatar) => {
     state.avatar = avatar
   },
@@ -60,9 +63,10 @@ const actions = {
           return reject('Verification failed, please Login again.')
         }
 
-        const { name, avatar } = data
+        const { name, avatar, id } = data
 
         commit('SET_NAME', name)
+        commit('SET_USER_ID', id)
         commit('SET_AVATAR', avatar)
         data.roles = [data.role]
         commit('SET_ROLES', data.roles)

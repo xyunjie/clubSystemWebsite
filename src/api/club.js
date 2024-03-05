@@ -54,3 +54,33 @@ export function getAllClub() {
     method: 'get'
   })
 }
+
+export function getMyClub(data) {
+  return request({
+    url: '/api/club/myClub',
+    method: 'post',
+    data
+  })
+}
+
+export function getHotClub() {
+  return request({
+    url: '/api/club/hot',
+    method: 'get'
+  })
+}
+export function getClubDetail(data) {
+  return request({
+    url: '/api/club/detail',
+    method: 'get',
+    params: data
+  })
+}
+
+export function userJoinClub(data) {
+  return request({
+    url: '/api/clubUser/join',
+    method: 'post',
+    data
+  })
+}

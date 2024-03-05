@@ -171,8 +171,8 @@ export const asyncRoutes = [
       {
         path: 'club',
         name: 'myClub',
-        component: () => import('@/views/system/systemAdmin.vue'),
-        meta: { title: '社团列表', icon: 'el-icon-help' }
+        component: () => import('@/views/my/club.vue'),
+        meta: { title: '我的社团', icon: 'el-icon-help' }
       },
       {
         path: 'announcement',

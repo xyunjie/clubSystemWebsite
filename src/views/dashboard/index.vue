@@ -1,6 +1,21 @@
 <template>
-  <div class="dashboard-container">
-    <div class="dashboard-text">name: {{ name }}</div>
+  <div>
+    <el-row :gutter="20" style="height: 500px">
+      <el-col :span="12">
+        <HotClub />
+      </el-col>
+      <el-col :span="12">
+        <About />
+      </el-col>
+    </el-row>
+    <el-row :gutter="20">
+      <el-col :span="12">
+        <HotActivity />
+      </el-col>
+      <el-col :span="12">
+        <SystemNotice />
+      </el-col>
+    </el-row>
   </div>
 </template>
 
@@ -9,6 +24,16 @@ import { mapGetters } from 'vuex'
 
 export default {
   name: 'Dashboard',
+  components: {
+    HotClub: () => import('@/views/dashboard/components/HotClub.vue'),
+    About: () => import('@/views/dashboard/components/About.vue'),
+    HotActivity: () => import('@/views/dashboard/components/HotActivity.vue'),
+    SystemNotice: () => import('@/views/dashboard/components/SystemNotice.vue')
+  },
+  data() {
+    return {
+    }
+  },
   computed: {
     ...mapGetters([
       'name'
