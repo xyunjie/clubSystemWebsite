@@ -1,8 +1,8 @@
 <template>
   <div>
-    <div :class="{'has-logo':showLogo}">
+    <div :class="{'has-logo':showLogo}" style="height: 100%">
       <logo v-if="showLogo" :collapse="isCollapse" />
-      <el-scrollbar wrap-class="scrollbar-wrapper">
+      <el-scrollbar wrap-class="scrollbar-wrapper" style="height: 100%">
         <el-menu
           :default-active="activeMenu"
           :collapse="isCollapse"

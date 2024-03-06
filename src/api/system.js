@@ -15,3 +15,11 @@ export function saveSystemInfo(data) {
     data
   })
 }
+
+export function getSystemNoticeList(data) {
+  return request({
+    url: '/api/system/notice',
+    method: 'post',
+    data
+  })
+}

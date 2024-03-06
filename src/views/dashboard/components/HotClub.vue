@@ -8,6 +8,7 @@
         :data="hotClubList"
         border
         style="width: 100%"
+        empty-text="暂无数据"
       >
         <el-table-column
           label="序号"
@@ -94,8 +95,19 @@
       <span slot="footer" class="dialog-footer">
         <el-button @click="handleClose">关 闭</el-button>
       </span>
-    </el-dialog>
-  </div>
+      <el-dialog
+        width="30%"
+        title="确认！"
+        :visible.sync="innerVisible"
+        append-to-body
+      >
+        <span>确定申请加入该社团吗？</span>
+        <span slot="footer" class="dialog-footer">
+          <el-button type="primary" @click="handleUserJoin">确 定</el-button>
+          <el-button @click="innerVisible = false">取 消</el-button>
+        </span>
+      </el-dialog>
+    </el-dialog></div>
 </template>
 
 <script>
@@ -108,6 +120,7 @@ export default {
     return {
       hotClubList: [],
       dialogVisible: false,
+      innerVisible: false,
       showClubInfo: {}
     }
   },
@@ -134,6 +147,9 @@ export default {
     },
     userJoin() {
       // TODO 添加弹窗提示
+      this.innerVisible = true
+    },
+    handleUserJoin() {
       userJoinClub({
         'clubId': this.showClubInfo.id,
         'userId': store.getters.userId

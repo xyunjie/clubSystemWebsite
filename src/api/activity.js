@@ -55,3 +55,10 @@ export function removeActivityUserEntry(data) {
     params: data
   })
 }
+
+export function getHotActivity() {
+  return request({
+    url: '/api/activity/hot',
+    method: 'get'
+  })
+}
