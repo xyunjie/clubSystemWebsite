@@ -247,9 +247,12 @@
         <el-table-column
           label="操作"
           align="center"
+          width="300"
         >
           <template v-slot:default="{ row }">
-            <el-button type="danger" icon="el-icon-delete" circle @click="onRemoveClubUser(row.id)" />
+            <el-button v-if="row.clubStatus !== -1 && row.clubStatus !== 0" type="danger" @click="onRemoveClubUser(row.id)">删除</el-button>
+            <el-button v-if="row.clubStatus === 0" type="success" @click="onHandleUserJoinClub(row, 1)">通过</el-button>
+            <el-button v-if="row.clubStatus === 0" type="warning" @click="onHandleUserJoinClub(row,2)">驳回</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -328,7 +331,15 @@ import { getClubUser, getUserList } from '@/api/user'
 import { getDictListByGrade } from '@/api/dict'
 import axios from 'axios'
 import { getToken } from '@/utils/auth'
-import { getClubBalance, getClubList, modifyClubStatus, removeClub, removeClubUser, saveOrUpdateClub } from '@/api/club'
+import {
+  getClubBalance,
+  getClubList,
+  handleUserJoinClub,
+  modifyClubStatus,
+  removeClub,
+  removeClubUser,
+  saveOrUpdateClub
+} from '@/api/club'
 import { uploadFile } from '@/api/public'
 
 export default {
@@ -541,6 +552,12 @@ export default {
     },
     onRemoveClubUser(val) {
       removeClubUser({ clubId: this.showClubInfoPage.clubId, userId: val }).then(() => {
+        this.getShowUserList(this.showClubInfoPage.pageNumber)
+      })
+    },
+    onHandleUserJoinClub(val, status) {
+      handleUserJoinClub({ id: val.id, status: status }).then(res => {
+        this.$message.success('操作成功')
         this.getShowUserList(this.showClubInfoPage.pageNumber)
       })
     },

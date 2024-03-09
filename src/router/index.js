@@ -163,7 +163,7 @@ export const asyncRoutes = [
     redirect: '/my/club',
     name: '我的社团',
     meta: {
-      roles: ['admin', 'clubAdmin', 'user'],
+      roles: ['user'],
       title: '我的社团',
       icon: 'el-icon-s-home'
     },
@@ -177,7 +177,7 @@ export const asyncRoutes = [
       {
         path: 'announcement',
         name: 'clubAnnouncement',
-        component: () => import('@/views/system/organizationAdmin.vue'),
+        component: () => import('@/views/my/clubNotice.vue'),
         meta: { title: '社团公告', icon: 'el-icon-help' }
       },
       {
@@ -206,7 +206,7 @@ export const asyncRoutes = [
     redirect: '/activity/list',
     name: '社团活动',
     meta: {
-      roles: ['admin', 'clubAdmin', 'user'],
+      roles: ['user'],
       title: '社团活动',
       icon: 'el-icon-s-home'
     },

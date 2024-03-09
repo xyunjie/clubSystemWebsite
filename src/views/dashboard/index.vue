@@ -1,18 +1,18 @@
 <template>
   <div>
     <el-row :gutter="20" style="height: 500px">
-      <el-col :span="12">
+      <el-col :span="16">
         <HotClub />
       </el-col>
-      <el-col :span="12">
+      <el-col :span="8">
         <About />
       </el-col>
     </el-row>
     <el-row :gutter="20">
-      <el-col :span="12">
+      <el-col :span="16">
         <HotActivity />
       </el-col>
-      <el-col :span="12">
+      <el-col :span="8">
         <SystemNotice />
       </el-col>
     </el-row>

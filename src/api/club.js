@@ -84,3 +84,11 @@ export function userJoinClub(data) {
     data
   })
 }
+
+export function handleUserJoinClub(data) {
+  return request({
+    url: '/api/clubUser/handler',
+    method: 'post',
+    data
+  })
+}
