@@ -159,7 +159,8 @@ export default {
         pageSize: 10,
         id: null,
         kind: 'notice',
-        query: ''
+        query: '',
+        isAdmin: true
       },
       tableData: [],
       total: 0,

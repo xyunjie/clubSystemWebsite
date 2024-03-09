@@ -8,12 +8,6 @@
         <el-button type="primary" @click="onSubmit">查询</el-button>
       </el-form-item>
     </el-form>
-    <div>
-      <div style="margin-left: auto; float: right; margin-bottom: 0.5rem">
-        <el-button style="" type="primary" @click="onAddClub">新增</el-button>
-        <el-button style="" type="primary" @click="onExport">导出</el-button>
-      </div>
-    </div>
     <el-table
       :data="tableData"
       border
@@ -34,6 +28,12 @@
         width="500"
       />
       <el-table-column
+        prop="createdUser.name"
+        label="社团创建者"
+        align="center"
+        width="150"
+      />
+      <el-table-column
         prop="money"
         label="所需社费"
         align="center"
@@ -47,24 +47,19 @@
       </el-table-column>
       <el-table-column
         prop="status"
-        label="状态"
+        label="加入状态"
         align="center"
         width="150"
       >
         <template v-slot="{ row }">
-          <el-tag v-if="row.status === 0" type="warning">待审核</el-tag>
-          <el-tag v-else-if="row.status === 1">审核通过</el-tag>
-          <el-tag v-else-if="row.status === 2" type="danger">审核未通过</el-tag>
-          <el-tag v-else-if="row.status === 3" type="warning">修改信息待审核</el-tag>
-          <el-tag v-else-if="row.status === 4" type="danger">已封禁</el-tag>
+          <el-tag v-if="row.joinStatus === -1" type="success">社团部长</el-tag>
+          <el-tag v-if="row.joinStatus === 0" type="warning">待审核</el-tag>
+          <el-tag v-else-if="row.joinStatus === 1">审核通过</el-tag>
+          <el-tag v-else-if="row.joinStatus === 2" type="danger">审核未通过</el-tag>
+          <el-tag v-else-if="row.joinStatus === 3" type="warning">修改信息待审核</el-tag>
+          <el-tag v-else-if="row.joinStatus === 4" type="danger">已封禁</el-tag>
         </template>
       </el-table-column>
-      <el-table-column
-        prop="createdUser.name"
-        label="社团创建者"
-        align="center"
-        width="150"
-      />
       <el-table-column
         prop="createdTime"
         label="社团创建时间"
@@ -111,21 +106,20 @@
         align="center"
       >
         <template v-slot:default="{ row }">
-          <el-button v-if="row.status === 4" type="success" @click="onHandleClub(row.id, 1)">解除封禁</el-button>
-          <el-button v-else-if="row.status !== 1" type="success" @click="onHandleClub(row.id, 1)">通过</el-button>
-          <el-button v-else-if="row.status === 1" type="warning" @click="onHandleClub(row.id, 4)">封禁</el-button>
-          <el-button type="primary" @click="onShowClubUserInfo(row)">查看成员</el-button>
-          <el-button type="primary" @click="onClubBalanceDetail(row)">资产详情</el-button>
+          <el-button v-if="row.joinStatus === 1 || row.joinStatus === -1" type="primary" @click="onShowClubUserInfo(row)">查看成员</el-button>
+          <el-button v-if="row.joinStatus === 1 || row.joinStatus === -1" type="primary" @click="onClubBalanceDetail(row)">资产详情</el-button>
           <el-popconfirm
             style="margin-left: 0.6rem"
             confirm-button-text="删除"
             cancel-button-text="取消"
             icon="el-icon-info"
             icon-color="red"
-            title="你确定要删除该社团吗？"
+            :title="row.joinStatus === -1 ? '你确定要解散该社团吗？？' : '你确定要退出该社团吗？？'"
             @confirm="onRemove(row.id)"
           >
-            <el-button slot="reference" type="danger">删除</el-button>
+            <el-button slot="reference" type="danger">
+              {{ row.joinStatus === -1 ? '解散' : '退出' }}
+            </el-button>
           </el-popconfirm>
         </template>
       </el-table-column>
@@ -330,7 +324,6 @@ import axios from 'axios'
 import { getToken } from '@/utils/auth'
 import {
   getClubBalance,
-  getClubList,
   getMyClub,
   modifyClubStatus,
   removeClub,
@@ -347,7 +340,8 @@ export default {
         pageSize: 10,
         dict: null,
         query: '',
-        role: 'user'
+        role: 'user',
+        isAdmin: false
       },
       form: {
         name: '',

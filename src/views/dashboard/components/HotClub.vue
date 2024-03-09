@@ -3,6 +3,7 @@
     <el-card class="box-card" :body-style="{ padding: '0px' }">
       <div slot="header" class="clearfix" style="width: 100%; text-align: center">
         <span>热门社团</span>
+        <el-button style="float: right; padding: 3px 0" type="text">更多</el-button>
       </div>
       <el-table
         :data="hotClubList"
@@ -144,18 +145,19 @@ export default {
     handleClose() {
       this.dialogVisible = false
       this.showClubInfo = {}
+      this.innerVisible = false
     },
     userJoin() {
-      // TODO 添加弹窗提示
       this.innerVisible = true
     },
     handleUserJoin() {
       userJoinClub({
         'clubId': this.showClubInfo.id,
         'userId': store.getters.userId
-      }).then(() => [
+      }).then(() => {
         this.$message.success('申请加入成功！')
-      ])
+        this.handleClose()
+      })
     }
   }
 }
