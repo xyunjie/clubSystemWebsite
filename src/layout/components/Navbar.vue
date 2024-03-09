@@ -7,7 +7,10 @@
     <div class="right-menu">
       <el-dropdown class="avatar-container" trigger="click">
         <div class="avatar-wrapper">
-          <img :src="avatar+'?imageView2/1/w/80/h/80'" class="user-avatar">
+          <!--          <img :src="avatar+'?imageView2/1/w/80/h/80'" class="user-avatar">-->
+          <span>
+            {{ userName }}
+          </span>
           <i class="el-icon-caret-bottom" />
         </div>
         <el-dropdown-menu slot="dropdown" class="user-dropdown">
@@ -26,6 +29,7 @@
             <span style="display:block;">退出登录</span>
           </el-dropdown-item>
         </el-dropdown-menu>
+
       </el-dropdown>
     </div>
 
@@ -175,6 +179,7 @@ import Breadcrumb from '@/components/Breadcrumb'
 import Hamburger from '@/components/Hamburger'
 import { changePassword, getInfo, updateInfo } from '@/api/user'
 import { getDictList, getDictListByGrade } from '@/api/dict'
+import store from '@/store'
 
 export default {
   components: {
@@ -228,6 +233,7 @@ export default {
         'sidebar',
         'avatar'
       ]),
+      userName: '操作',
       dialogVisible: false,
       userInfo: {},
       treeOption: [],
@@ -251,6 +257,10 @@ export default {
         confirmPassword: [{ required: true, trigger: 'blur', validator: validatePassword }]
       }
     }
+  },
+  mounted() {
+    this.userInfo = store.getters.name
+    console.log(this.userInfo)
   },
   methods: {
     toggleSideBar() {
