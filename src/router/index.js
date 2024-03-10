@@ -95,7 +95,7 @@ export const asyncRoutes = [
     alwaysShow: true,
     name: '社团/组织管理',
     meta: {
-      roles: ['admin', 'clubAdmin'],
+      roles: ['clubAdmin'],
       title: '社团/组织管理',
       icon: 'el-icon-s-home'
     },
@@ -172,7 +172,7 @@ export const asyncRoutes = [
         path: 'club',
         name: 'myClub',
         component: () => import('@/views/my/club.vue'),
-        meta: { title: '我的社团', icon: 'el-icon-help' }
+        meta: { title: '我的社团', icon: 'el-icon-sugar' }
       },
       {
         path: 'announcement',

@@ -4,6 +4,7 @@
       <logo v-if="showLogo" :collapse="isCollapse" />
       <el-scrollbar wrap-class="scrollbar-wrapper" style="height: 100%">
         <el-menu
+          :default-openeds="['/adminUser','/adminClub', '/adminSystem', '/my', '/activity']"
           :default-active="activeMenu"
           :collapse="isCollapse"
           :background-color="variables.menuBg"

@@ -26,12 +26,12 @@
         prop="user.name"
         label="报名人员"
         align="center"
-        width="180"
       />
       <el-table-column
         prop="user.unitInfo"
         label="报名人员专业班级"
         align="center"
+        width="380"
       />
       <el-table-column
         prop="beginTime"
