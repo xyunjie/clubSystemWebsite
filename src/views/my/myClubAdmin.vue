@@ -8,11 +8,11 @@
         <el-button type="primary" @click="onSubmit">查询</el-button>
       </el-form-item>
     </el-form>
-    <div>
-      <div style="margin-left: auto; float: right; margin-bottom: 0.5rem">
-        <el-button style="" type="primary" @click="onAddClub">新增</el-button>
-      </div>
-    </div>
+    <!--    <div>-->
+    <!--      <div style="margin-left: auto; float: right; margin-bottom: 0.5rem">-->
+    <!--        <el-button style="" type="primary" @click="onAddClub">新增</el-button>-->
+    <!--      </div>-->
+    <!--    </div>-->
     <el-table
       :data="tableData"
       border
@@ -80,9 +80,10 @@
         align="center"
       >
         <template v-slot:default="{ row }">
-          <el-button v-if="row.joinStatus === 1 || row.joinStatus === -1" type="primary" @click="onShowClubUserInfo(row)">查看成员</el-button>
-          <el-button v-if="row.joinStatus === 1 || row.joinStatus === -1" type="primary" @click="onClubBalanceDetail(row)">资产详情</el-button>
+          <el-button v-if="row.clubStatus === 0" type="success" @click="onHandleUserJoinClub(row, 1)">通过</el-button>
+          <el-button v-if="row.clubStatus === 0" type="warning" @click="onHandleUserJoinClub(row,2)">驳回</el-button>
           <el-popconfirm
+            v-if="row.clubStatus !== -1"
             style="margin-left: 0.6rem"
             confirm-button-text="删除"
             cancel-button-text="取消"
@@ -170,20 +171,13 @@
 </template>
 
 <script>
-import { getClubUser, getUserList } from '@/api/user'
 import { getDictListByGrade } from '@/api/dict'
-import axios from 'axios'
-import { getToken } from '@/utils/auth'
 import {
-  getClubBalance,
-  getMyClubUser,
-  modifyClubStatus,
-  removeClub,
+  getMyClubUser, handleUserJoinClub,
   removeClubUser,
   saveOrUpdateClub
 } from '@/api/club'
 import { uploadFile } from '@/api/public'
-import store from '@/store'
 
 export default {
   data() {
@@ -237,6 +231,12 @@ export default {
         this.tableLoading = false
       })
     },
+    onHandleUserJoinClub(val, status) {
+      handleUserJoinClub({ id: val.id, status: status }).then(res => {
+        this.$message.success('操作成功')
+        this.getShowUserList(this.showClubInfoPage.pageNumber)
+      })
+    },
     onSubmit() {
       this.tableData = []
       this.getList(this.pageParam.pageNumber)
@@ -252,30 +252,9 @@ export default {
         this.treeOption = res.data
       })
     },
-    onRemove(val, status) {
-      // 删除社团
-      if (status === -1) {
-        removeClub({ id: val }).then(res => {
-          // 刷新页面
-          this.getList(this.pageParam.pageNumber)
-        })
-      } else {
-        modifyClubStatus({ id: val, status: 3 }).then(res => {
-          this.getList(this.pageParam.pageNumber)
-        })
-      }
-    },
-    onHandleClub(val, status) {
-      modifyClubStatus({ id: val, status: status }).then(res => {
-        this.getList(this.pageParam.pageNumber)
-      })
-    },
-    onAddClub() {
-      this.dialogVisible = true
-      getUserList({ pageNumber: 1, pageSize: 10000, role: 'user' }).then(res => {
-        this.userList = res.data.records
-        this.form.createdBy = store.getters.userId
-        console.log(this.form.createdBy)
+    onRemove(val) {
+      removeClubUser({ clubId: this.showClubInfoPage.clubId, userId: val }).then(() => {
+        this.getShowUserList(this.showClubInfoPage.pageNumber)
       })
     },
     handleClose() {
@@ -330,132 +309,10 @@ export default {
     handlePreview(file) {
       console.log(this.fileList)
     },
-    handleExceed() {
-      this.$message.warning(`只可以上传一个附件哦！`)
-    },
-    async getShowUserList(current = 1) {
-      this.showClubInfoPage.pageNumber = current
-      const res = await getClubUser(this.showClubInfoPage)
-      this.showClubUserList = res.data.records
-      this.showUserTotal = res.data.total
-    },
-    async getBalanceDetailList(current = 1) {
-      this.balancePage.pageNumber = current
-      getClubBalance(this.balancePage).then(res => {
-        this.balanceDetailList = res.data.records
-        this.balanceDetailVisible = true
-      })
-    },
-    async onShowClubUserInfo(val) {
-      this.showClubTitle = val.name + '的成员列表'
-      this.showClubInfoPage.clubId = val.id
-      await this.getShowUserList()
-      this.showClubUserDialogVisible = true
-    },
-    handleCurrentChangeShowClubUser(val) {
-      this.getShowUserList(val)
-    },
-    onClubBalanceDetail(val) {
-      this.balancePage.clubId = val.id
-      this.getBalanceDetailList()
-    },
-    handleCurrentChangeBalanceDetail(val) {
-      this.getBalanceDetailList(val)
-    },
-    onModifyClub(val) {
-      console.log(val)
-    },
-    beforeUpload(file) {
-      if (!/\.(doc|docx|pdf)$/.test(file.name)) {
-        this.$notify.error({
-          title: '错误',
-          message: '只能上传word或pdf文件'
-        })
-        this.fileList = []
-        return false
-      } else {
-        const size = file.size / 1024 / 1024
-        if (size > 5) {
-          this.$notify.warning({
-            title: '警告',
-            message: '大小必须小于5M'
-          })
-          return
-        }
-      }
-      this.filename = file.name
-    },
-    onRemoveClubUser(val) {
-      removeClubUser({ clubId: this.showClubInfoPage.clubId, userId: val }).then(() => {
-        this.getShowUserList(this.showClubInfoPage.pageNumber)
-      })
-    },
     onDownloadTemplate(e) {
       // 组织默认行为
       e.preventDefault()
       console.log('下载模板')
-    },
-    onDownload(val) {
-      if (val === null || val === undefined || val === '') {
-        return
-      }
-      axios({
-        url: val,
-        method: 'post'
-      }).then((blob) => {
-        const url = window.URL.createObjectURL(new Blob([blob]))
-        const link = document.createElement('a')
-        link.href = url
-        // 获取文件名
-        const fileName = val.substring(val.lastIndexOf('/') + 1)
-        link.setAttribute('download', fileName) // 设置文件名
-        document.body.appendChild(link)
-        link.click()
-        link.parentNode.removeChild(link)
-      }).catch(error => {
-        // 请求失败处理
-        console.log(error)
-        this.$message.error('下载失败!')
-        this.tableLoading = false
-      })
-    },
-    onExport() {
-      const token = getToken()
-      this.tableLoading = true
-      axios({
-        url: process.env.VUE_APP_BASE_API + 'api/club/export',
-        method: 'post',
-        data: this.pageParam,
-        responseType: 'blob',
-        headers: { token: token }
-      })
-        .then((res) => {
-          // 处理返回的文件流
-          const blob = new Blob([res.data], { type: res.data.type })
-          // 获取fileName,截取content-disposition的filename；按=分割，取最后一个
-          const fileName = new Date().toLocaleDateString()
-          const downloadElement = document.createElement('a')
-          // 创建下载的链接
-          const href = window.URL.createObjectURL(blob)
-          downloadElement.href = href
-          // 下载后文件名
-          downloadElement.download = fileName + '社团列表.xlsx'
-          document.body.appendChild(downloadElement)
-          // 点击下载
-          downloadElement.click()
-          // 下载完成移除元素
-          document.body.removeChild(downloadElement)
-          // 释放blob
-          window.URL.revokeObjectURL(href)
-          this.$message.success('导出成功!')
-          this.tableLoading = false
-        })
-        .catch(error => {
-          // 请求失败处理
-          console.log(error)
-          this.$message.error('导出失败!')
-          this.tableLoading = false
-        })
     }
   }
 }

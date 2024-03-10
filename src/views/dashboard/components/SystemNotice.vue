@@ -20,25 +20,10 @@
           </template>
         </el-table-column>
         <el-table-column
-          prop="name"
-          label="名称"
+          prop="title"
+          label="标题"
           align="center"
-          width="180"
         />
-        <el-table-column
-          prop="description"
-          align="center"
-          label="描述"
-        />
-        <el-table-column
-          prop="balance"
-          align="center"
-          label="所需社费"
-        >
-          <template v-slot:default="{row}">
-            <el-tag>{{ row.money }}元</el-tag>
-          </template>
-        </el-table-column>
         <el-table-column
           fixed="right"
           label="操作"
@@ -57,36 +42,24 @@
       width="45%"
       :before-close="handleClose"
     >
-      <el-descriptions class="margin-top" :column="3" border>
+      <el-descriptions class="margin-top" :column="2" border>
         <el-descriptions-item>
           <template slot="label">
-            社团名称
+            公告标题
           </template>
-          {{ showClubInfo.name }}
+          {{ showClubInfo.title }}
         </el-descriptions-item>
         <el-descriptions-item>
           <template slot="label">
-            社长
-          </template>
-          {{ showClubInfo.createdName }}
-        </el-descriptions-item>
-        <el-descriptions-item>
-          <template slot="label">
-            所需社费
-          </template>
-          {{ showClubInfo.money }}
-        </el-descriptions-item>
-        <el-descriptions-item>
-          <template slot="label">
-            社团描述
-          </template>
-          {{ showClubInfo.description }}
-        </el-descriptions-item>
-        <el-descriptions-item>
-          <template slot="label">
-            创建时间
+            公告时间
           </template>
           {{ showClubInfo.createdTime }}
+        </el-descriptions-item>
+        <el-descriptions-item>
+          <template slot="label">
+            公告内容
+          </template>
+          {{ showClubInfo.content }}
         </el-descriptions-item>
       </el-descriptions>
       <span slot="footer" class="dialog-footer">
@@ -110,7 +83,8 @@ export default {
       queryParam: {
         pageNumber: 1,
         pageSize: 10,
-        query: ''
+        query: '',
+        kind: 'system_notice'
       }
     }
   },
@@ -124,11 +98,7 @@ export default {
       })
     },
     async handleClick(val) {
-      console.log(val)
-      await getClubDetail({ id: val.id }).then(res => {
-        this.showClubInfo = res.data
-      })
-      console.log(this.showClubInfo)
+      this.showClubInfo = val
       this.dialogVisible = true
     },
     handleClose() {

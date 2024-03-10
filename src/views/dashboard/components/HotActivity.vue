@@ -20,25 +20,31 @@
           </template>
         </el-table-column>
         <el-table-column
-          prop="name"
+          prop="title"
           label="名称"
           align="center"
           width="180"
         />
         <el-table-column
-          prop="description"
+          prop="content"
           align="center"
           label="描述"
         />
         <el-table-column
-          prop="balance"
+          prop="clubName"
           align="center"
-          label="所需社费"
-        >
-          <template v-slot:default="{row}">
-            <el-tag>{{ row.money }}元</el-tag>
-          </template>
-        </el-table-column>
+          label="社团名称"
+        />
+        <el-table-column
+          prop="beginTime"
+          align="center"
+          label="开始时间"
+        />
+        <el-table-column
+          prop="endTime"
+          align="center"
+          label="结束时间"
+        />
         <el-table-column
           fixed="right"
           label="操作"
@@ -57,39 +63,39 @@
       width="45%"
       :before-close="handleClose"
     >
-      <el-descriptions class="margin-top" :column="3" border>
+      <el-descriptions class="margin-top" :column="2" border>
         <template slot="extra">
-          <el-button type="primary" size="small" @click="userJoin()">申请加入</el-button>
+          <el-button type="primary" size="small" @click="userJoin()">申请参加</el-button>
         </template>
         <el-descriptions-item>
           <template slot="label">
-            社团名称
+            活动标题
           </template>
-          {{ showClubInfo.name }}
+          {{ showClubInfo.title }}
         </el-descriptions-item>
         <el-descriptions-item>
           <template slot="label">
-            社长
+            活动举办组织
           </template>
-          {{ showClubInfo.createdName }}
+          {{ showClubInfo.clubName }}
+        </el-descriptions-item>
+        <el-descriptions-item span="2">
+          <template slot="label">
+            活动描述
+          </template>
+          {{ showClubInfo.content }}
         </el-descriptions-item>
         <el-descriptions-item>
           <template slot="label">
-            所需社费
+            开始时间
           </template>
-          {{ showClubInfo.money }}
+          {{ showClubInfo.beginTime }}
         </el-descriptions-item>
         <el-descriptions-item>
           <template slot="label">
-            社团描述
+            结束时间
           </template>
-          {{ showClubInfo.description }}
-        </el-descriptions-item>
-        <el-descriptions-item>
-          <template slot="label">
-            创建时间
-          </template>
-          {{ showClubInfo.createdTime }}
+          {{ showClubInfo.endTime }}
         </el-descriptions-item>
       </el-descriptions>
       <span slot="footer" class="dialog-footer">
@@ -113,7 +119,7 @@
 <script>
 import { getClubDetail, getHotClub, userJoinClub } from '@/api/club'
 import store from '@/store'
-import { getHotActivity } from '@/api/activity'
+import { entryActivity, getHotActivity, modifyActivityUserEntry } from '@/api/activity'
 
 export default {
   name: 'HotActivity',
@@ -135,28 +141,24 @@ export default {
       })
     },
     async handleClick(val) {
-      console.log(val)
-      await getClubDetail({ id: val.id }).then(res => {
-        this.showClubInfo = res.data
-      })
-      console.log(this.showClubInfo)
+      this.showClubInfo = val
       this.dialogVisible = true
     },
     handleClose() {
       this.dialogVisible = false
       this.showClubInfo = {}
+      this.innerVisible = false
     },
     userJoin() {
-      // TODO 添加弹窗提示
       this.innerVisible = true
     },
     handleUserJoin() {
-      userJoinClub({
-        'clubId': this.showClubInfo.id,
-        'userId': store.getters.userId
-      }).then(() => [
-        this.$message.success('申请加入成功！')
-      ])
+      entryActivity({
+        'id': this.showClubInfo.id
+      }).then(() => {
+        this.$message.success('报名成功，等待审核！')
+      })
+      this.handleClose()
     }
   }
 }

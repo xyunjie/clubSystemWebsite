@@ -145,7 +145,7 @@
 </template>
 
 <script>
-import { getUserList, modifyUserRole, removeUser } from '@/api/user'
+import { getUserList, modifyUserRole } from '@/api/user'
 import { getDictListByGrade } from '@/api/dict'
 import axios from 'axios'
 import { getToken } from '@/utils/auth'

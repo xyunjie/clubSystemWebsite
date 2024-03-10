@@ -214,19 +214,19 @@ export const asyncRoutes = [
       {
         path: 'list',
         name: 'activityList',
-        component: () => import('@/views/system/systemAdmin.vue'),
+        component: () => import('@/views/my/clubActivity.vue'),
         meta: { title: '活动列表', icon: 'el-icon-help' }
       },
       {
         path: 'application',
         name: 'activityApplication',
-        component: () => import('@/views/system/organizationAdmin.vue'),
+        component: () => import('@/views/my/clubActivityJoinAdmin.vue'),
         meta: { title: '报名管理', icon: 'el-icon-help' }
       },
       {
         path: 'wonderful',
         name: 'activityWonderful',
-        component: () => import('@/views/system/systemNotice.vue'),
+        component: () => import('@/views/my/clubActivityExciting.vue'),
         meta: { title: '精彩瞬间', icon: 'el-icon-help' }
       }
     ]

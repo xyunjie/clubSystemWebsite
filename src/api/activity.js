@@ -69,3 +69,19 @@ export function getClubWarning() {
     method: 'get'
   })
 }
+
+export function getMyActivity(data) {
+  return request({
+    url: '/api/activity/getMyActivity',
+    method: 'post',
+    data
+  })
+}
+
+export function entryActivity(data) {
+  return request({
+    url: '/api/activity/entry',
+    method: 'get',
+    params: data
+  })
+}

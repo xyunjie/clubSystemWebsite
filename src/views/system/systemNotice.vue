@@ -106,7 +106,8 @@ export default {
         pageSize: 10,
         id: null,
         kind: 'system_notice',
-        query: ''
+        query: '',
+        isAdmin: true
       },
       activityUserListParam: {
         pageNumber: 1,

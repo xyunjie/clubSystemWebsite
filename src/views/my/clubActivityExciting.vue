@@ -10,11 +10,6 @@
         </el-form-item>
       </el-form>
     </div>
-    <div>
-      <div style="float: right; margin-bottom: 0.5rem">
-        <el-button style="" type="primary" @click="onAddClubNotice">新增</el-button>
-      </div>
-    </div>
     <el-table
       :data="tableData"
       border
@@ -29,13 +24,13 @@
       />
       <el-table-column
         prop="title"
-        label="公告标题"
+        label="活动标题"
         align="center"
         width="180"
       />
       <el-table-column
         prop="content"
-        label="公告内容"
+        label="活动内容"
         align="center"
         width="280"
       >
@@ -52,25 +47,17 @@
         width="150"
       />
       <el-table-column
-        prop="top"
-        label="是否置顶"
+        prop="beginTime"
+        label="开始时间"
         align="center"
-        width="150"
-      >
-        <template v-slot:default="{ row }">
-          <el-tag>{{ row.top ? '是' : '否' }}</el-tag>
-        </template>
-      </el-table-column>
+        width="180"
+      />
       <el-table-column
-        prop="sort"
-        label="排序"
+        prop="endTime"
+        label="结束时间"
         align="center"
-        width="200"
-      >
-        <template v-slot:default="{row}">
-          <el-tag>{{ row.sort }}</el-tag>
-        </template>
-      </el-table-column>
+        width="180"
+      />
       <el-table-column
         prop="createdTime"
         label="创建时间"
@@ -94,22 +81,11 @@
       <el-table-column
         label="操作"
         fixed="right"
-        width="300"
+        width="380"
         align="center"
       >
         <template v-slot:default="{ row }">
-          <el-button type="primary" @click="onShowDetail(row)">查看</el-button>
-          <el-popconfirm
-            style="margin-left: 0.7rem"
-            confirm-button-text="删除"
-            cancel-button-text="取消"
-            icon="el-icon-info"
-            icon-color="red"
-            title="你确定要删除该公告吗？"
-            @confirm="onRemove(row.id)"
-          >
-            <el-button v-if="row.createdBy === userId" slot="reference" type="danger">删除公告</el-button>
-          </el-popconfirm>
+          <el-button type="success" @click="onShowActivityUser(row.id)">精彩瞬间</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -123,20 +99,36 @@
     <el-dialog
       title="添加社团公告"
       :visible.sync="dialogVisible"
-      width="50%"
+      width="80%"
       :before-close="handleClose"
     >
-      <el-form ref="noticeForm" :model="noticeForm" :rules="rules" label-width="180px" class="demo-ruleForm">
+      <el-form ref="activityForm" :model="activityForm" :rules="rules" label-width="180px" class="demo-ruleForm">
         <el-form-item label="选择社团" prop="clubId">
-          <el-select v-model="noticeForm.clubId" placeholder="请选择要公告的社团/组织" style="width: 80%">
+          <el-select v-model="activityForm.clubId" placeholder="请选择活动社团" style="width: 80%">
             <el-option v-for="(item) in clubOption" :key="item.key" :label="item.key" :value="item.value" />
           </el-select>
         </el-form-item>
-        <el-form-item label="公告标题" prop="title">
-          <el-input v-model="noticeForm.title" placeholder="请输入公告标题" style="width: 80%" />
+        <el-form-item label="活动标题" prop="title">
+          <el-input v-model="activityForm.title" placeholder="请输入活动标题" style="width: 80%" />
         </el-form-item>
-        <el-form-item label="公告内容" prop="content">
-          <el-input v-model="noticeForm.content" placeholder="请输入公告内容" type="textarea" style="width: 80%" />
+        <el-form-item label="活动描述" prop="content">
+          <el-input v-model="activityForm.content" placeholder="请输入活动描述" type="textarea" style="width: 80%" />
+        </el-form-item>
+        <el-form-item label="开始时间" prop="startTime">
+          <el-date-picker
+            v-model="activityForm.beginTime"
+            type="datetime"
+            placeholder="选择开始时间"
+            value-format="yyyy-MM-dd HH:mm:ss"
+          />
+        </el-form-item>
+        <el-form-item label="结束时间" prop="endTime">
+          <el-date-picker
+            v-model="activityForm.endTime"
+            type="datetime"
+            placeholder="选择结束时间"
+            value-format="yyyy-MM-dd HH:mm:ss"
+          />
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -145,25 +137,71 @@
       </span>
     </el-dialog>
     <el-dialog
-      title="公告详情"
-      :visible.sync="dialogDetailVisible"
-      width="50%"
+      title="活动参与人员"
+      :visible.sync="dialogShowUserVisible"
+      width="70%"
       :before-close="handleClose"
     >
-      <el-descriptions class="margin-top" :column="1" border direction="vertical" :label-style="{textAlign: 'center'}" :content-style="{textAlign: 'center'}">
-        <el-descriptions-item>
-          <template slot="label">
-            公告标题
+      <el-table
+        :data="activityUserList"
+        border
+        style="width: 100%"
+      >
+        <el-table-column
+          fixed
+          prop="user.name"
+          label="姓名"
+          width="150"
+          align="center"
+        />
+        <el-table-column
+          prop="user.studentId"
+          label="学号/账号"
+          width="140"
+          align="center"
+        />
+        <el-table-column
+          prop="user.collegeName"
+          label="学院"
+          width="140"
+          align="center"
+        />
+        <el-table-column
+          prop="user.majorName"
+          label="专业"
+          width="140"
+          align="center"
+        />
+        <el-table-column
+          prop="clazzName"
+          label="班级"
+          width="180"
+          align="center"
+        />
+        <el-table-column
+          prop="user.sexName"
+          label="性别"
+          width="120"
+          align="center"
+        />
+        <el-table-column
+          prop="status"
+          label="状态"
+          width="120"
+          align="center"
+        >
+          <template v-slot:default="{row}">
+            <el-tag v-if="row.status === 1" type="success">审核通过</el-tag>
+            <el-tag v-if="row.status === 0" type="warning">待审核</el-tag>
+            <el-tag v-if="row.status === 2" type="danger">未通过</el-tag>
           </template>
-          {{ showNoticeDetail.title }}
-        </el-descriptions-item>
-        <el-descriptions-item>
-          <template slot="label">
-            公告内容
-          </template>
-          {{ showNoticeDetail.content }}
-        </el-descriptions-item>
-      </el-descriptions>
+        </el-table-column>
+        <el-table-column
+          prop="createdTime"
+          label="报名时间"
+          align="center"
+        />
+      </el-table>
       <span slot="footer" class="dialog-footer">
         <el-button @click="handleClose">关 闭</el-button>
       </span>
@@ -173,39 +211,45 @@
 
 <script>
 import { getDictListByGrade } from '@/api/dict'
-import { getActivityList, removeActivity, saveOrUpdateActivity } from '@/api/activity'
+import {
+  getActivityList,
+  getActivityUserList,
+  modifyActivityStatus,
+  removeActivity, saveOrUpdateActivity
+} from '@/api/activity'
 import { getMyClub } from '@/api/club'
-import store from '@/store'
 
 export default {
   data() {
     return {
-      userId: store.getters.userId,
       pageParam: {
         pageNumber: 1,
         pageSize: 10,
         id: null,
-        kind: 'notice',
+        kind: 'activity',
         query: '',
-        isAdmin: true
+        isAdmin: false
+      },
+      activityUserListParam: {
+        pageNumber: 1,
+        pageSize: 10,
+        activityId: null
       },
       getAdminClubParam: {
         pageNumber: 1,
         pageSize: 10,
         isAdmin: false
       },
+      activityForm: {
+        kind: 'activity'
+      },
       tableData: [],
       total: 0,
       treeOption: [],
-      dialogVisible: false,
-      dialogDetailVisible: false,
-      showNoticeDetail: {},
-      selectUser: null,
-      addClubAdminOption: [],
+      dialogShowUserVisible: false,
       clubOption: [],
-      noticeForm: {
-        kind: 'notice'
-      },
+      activityUserList: [],
+      dialogVisible: false,
       rules: {
         title: [
           { required: true, message: '请输入公告标题', trigger: 'blur' },
@@ -216,6 +260,12 @@ export default {
         ],
         clubId: [
           { required: true, message: '请选择要公告的社团', trigger: 'blur' }
+        ],
+        beginTime: [
+          { required: true, message: '请选择开始时间', trigger: 'blur' }
+        ],
+        endTime: [
+          { required: true, message: '请选择结束时间', trigger: 'blur' }
         ]
       }
     }
@@ -223,7 +273,6 @@ export default {
   created() {
     this.onSelectGrade()
     this.getList(1)
-    console.log(this.userId)
   },
   methods: {
     getList(current = 1) {
@@ -237,22 +286,12 @@ export default {
     onSubmit() {
       this.getList(this.pageParam.pageNumber)
     },
-    onGetMyAdminClub() {
-      getMyClub(this.getAdminClubParam).then(res => {
-        this.clubOption = res.data.records.map(item => {
-          return {
-            key: item.name,
-            value: item.id
-          }
-        })
-      })
+    onAddClubActivity() {
+      this.dialogVisible = true
+      this.onGetMyAdminClub()
     },
     handleCurrentChange(val) {
       this.getList(val)
-    },
-    onShowDetail(val) {
-      this.dialogDetailVisible = true
-      this.showNoticeDetail = val
     },
     handleChangeClass(val) {
       console.log(val, this.pageParam)
@@ -268,19 +307,39 @@ export default {
         this.getList(this.pageParam.pageNumber)
       })
     },
-    onAddClubNotice() {
-      this.dialogVisible = true
-      this.onGetMyAdminClub()
+    onGetMyAdminClub() {
+      getMyClub(this.getAdminClubParam).then(res => {
+        this.clubOption = res.data.records.map(item => {
+          return {
+            key: item.name,
+            value: item.id
+          }
+        })
+      })
+    },
+    onHandleUser(val, status) {
+      console.log(val, status)
+      modifyActivityStatus({ id: val, status: status }).then(res => {
+        this.getList(this.pageParam.pageNumber)
+      })
     },
     handleClose() {
       this.dialogVisible = false
+      this.dialogShowUserVisible = false
       this.selectUser = null
-      this.dialogDetailVisible = false
+    },
+    onShowActivityUser(val) {
+      this.activityUserListParam.activityId = val
+      getActivityUserList(this.activityUserListParam).then(res => {
+        this.dialogShowUserVisible = true
+        this.activityUserList = res.data.records
+        console.log(res)
+      })
     },
     handleSave() {
-      this.$refs.noticeForm.validate((valid) => {
+      this.$refs.activityForm.validate((valid) => {
         if (valid) {
-          saveOrUpdateActivity(this.noticeForm).then(res => {
+          saveOrUpdateActivity(this.activityForm).then(res => {
             this.dialogVisible = false
             this.getList(this.pageParam.pageNumber)
           })
