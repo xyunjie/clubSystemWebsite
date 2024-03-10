@@ -58,7 +58,7 @@
       </el-table>
     </el-card>
     <el-dialog
-      title="社团详情"
+      title="活动详情"
       :visible.sync="dialogVisible"
       width="45%"
       :before-close="handleClose"
