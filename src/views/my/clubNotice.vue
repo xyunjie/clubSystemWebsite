@@ -98,7 +98,7 @@
         align="center"
       >
         <template v-slot:default="{ row }">
-          <el-button type="primary">查看</el-button>
+          <el-button type="primary" @click="onShowDetail(row)">查看</el-button>
           <el-popconfirm
             style="margin-left: 0.7rem"
             confirm-button-text="删除"
@@ -120,16 +120,9 @@
       style="margin-top: 1rem; text-align: right"
       @current-change="handleCurrentChange"
     />
-    <el-pagination
-      background
-      layout="prev, pager, next"
-      :total="total"
-      style="margin-top: 1rem; text-align: right"
-      @current-change="handleCurrentChange"
-    />
     <el-dialog
-      title="公告详情"
-      :visible.sync="dialogDetailVisible"
+      title="添加社团公告"
+      :visible.sync="dialogVisible"
       width="50%"
       :before-close="handleClose"
     >
@@ -151,12 +144,36 @@
         <el-button @click="handleClose">关 闭</el-button>
       </span>
     </el-dialog>
+    <el-dialog
+      title="公告详情"
+      :visible.sync="dialogDetailVisible"
+      width="50%"
+      :before-close="handleClose"
+    >
+      <el-descriptions class="margin-top" :column="1" border direction="vertical" :label-style="{textAlign: 'center'}" :content-style="{textAlign: 'center'}">
+        <el-descriptions-item>
+          <template slot="label">
+            公告标题
+          </template>
+          {{ showNoticeDetail.title }}
+        </el-descriptions-item>
+        <el-descriptions-item>
+          <template slot="label">
+            公告内容
+          </template>
+          {{ showNoticeDetail.content }}
+        </el-descriptions-item>
+      </el-descriptions>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="handleClose">关 闭</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import { getDictListByGrade } from '@/api/dict'
-import { getActivityList, modifyActivityStatus, removeActivity, saveOrUpdateActivity } from '@/api/activity'
+import { getActivityList, removeActivity, saveOrUpdateActivity } from '@/api/activity'
 import { getMyClub } from '@/api/club'
 import store from '@/store'
 
@@ -170,7 +187,7 @@ export default {
         id: null,
         kind: 'notice',
         query: '',
-        isAdmin: false
+        isAdmin: true
       },
       getAdminClubParam: {
         pageNumber: 1,
@@ -182,6 +199,7 @@ export default {
       treeOption: [],
       dialogVisible: false,
       dialogDetailVisible: false,
+      showNoticeDetail: {},
       selectUser: null,
       addClubAdminOption: [],
       clubOption: [],
@@ -230,6 +248,10 @@ export default {
     handleCurrentChange(val) {
       this.getList(val)
     },
+    onShowDetail(val) {
+      this.dialogDetailVisible = true
+      this.showNoticeDetail = val
+    },
     handleChangeClass(val) {
       console.log(val, this.pageParam)
     },
@@ -244,12 +266,6 @@ export default {
         this.getList(this.pageParam.pageNumber)
       })
     },
-    onHandleUser(val, status) {
-      console.log(val, status)
-      modifyActivityStatus({ id: val, status: status }).then(res => {
-        this.getList(this.pageParam.pageNumber)
-      })
-    },
     onAddClubNotice() {
       this.dialogVisible = true
       this.onGetMyAdminClub()
@@ -257,6 +273,7 @@ export default {
     handleClose() {
       this.dialogVisible = false
       this.selectUser = null
+      this.dialogDetailVisible = false
     },
     handleSave() {
       this.$refs.noticeForm.validate((valid) => {

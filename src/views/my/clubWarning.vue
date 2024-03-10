@@ -10,11 +10,6 @@
         </el-form-item>
       </el-form>
     </div>
-    <div style="">
-      <div style="float: right; margin-bottom: 0.5rem">
-        <el-button style="" type="primary" @click="onAddClubWarning">新增</el-button>
-      </div>
-    </div>
     <el-table
       :data="tableData"
       border
@@ -50,25 +45,6 @@
         align="center"
         width="180"
       />
-      <el-table-column
-        label="操作"
-        align="center"
-        width="120"
-      >
-        <template v-slot:default="{ row }">
-          <el-popconfirm
-            style="margin-left: 0.7rem"
-            confirm-button-text="删除"
-            cancel-button-text="取消"
-            icon="el-icon-info"
-            icon-color="red"
-            title="你确定要删除该警告吗？"
-            @confirm="onRemove(row.id)"
-          >
-            <el-button slot="reference" type="danger">删除警告</el-button>
-          </el-popconfirm>
-        </template>
-      </el-table-column>
     </el-table>
     <el-pagination
       background
@@ -106,8 +82,7 @@
 
 <script>
 import {
-  getActivityList,
-  getActivityUserList,
+  getActivityUserList, getClubWarning,
   modifyActivityStatus,
   removeActivity, saveOrUpdateActivity
 } from '@/api/activity'
@@ -122,7 +97,7 @@ export default {
         id: null,
         kind: 'warning',
         query: '',
-        isAdmin: true
+        isAdmin: false
       },
       activityUserListParam: {
         pageNumber: 1,
@@ -160,10 +135,10 @@ export default {
   methods: {
     getList(current = 1) {
       this.pageParam.pageNumber = current
-      getActivityList(this.pageParam).then(res => {
+      getClubWarning(this.pageParam).then(res => {
         console.log(res)
-        this.tableData = res.data.records
-        this.total = res.data.total
+        this.tableData = res.data
+        this.total = res.data.length
       })
     },
     onSubmit() {

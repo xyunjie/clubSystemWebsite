@@ -92,3 +92,27 @@ export function handleUserJoinClub(data) {
     data
   })
 }
+
+export function getClubBalanceList(data) {
+  return request({
+    url: '/api/balance/list',
+    method: 'post',
+    data
+  })
+}
+
+export function saveClubBalance(data) {
+  return request({
+    url: '/api/balance/save',
+    method: 'post',
+    data
+  })
+}
+
+export function getMyClubUser(data) {
+  return request({
+    url: '/api/club/getMyClubUser',
+    method: 'post',
+    data
+  })
+}

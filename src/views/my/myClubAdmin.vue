@@ -11,7 +11,6 @@
     <div>
       <div style="margin-left: auto; float: right; margin-bottom: 0.5rem">
         <el-button style="" type="primary" @click="onAddClub">新增</el-button>
-        <el-button style="" type="primary" @click="onExport">导出</el-button>
       </div>
     </div>
     <el-table
@@ -22,88 +21,58 @@
       <el-table-column
         v-loading="tableLoading"
         fixed
-        prop="name"
+        prop="clubName"
         label="社团名称"
         align="center"
         width="150"
       />
       <el-table-column
-        prop="description"
-        label="社团介绍"
+        prop="sex"
+        label="性别"
         align="center"
-        width="500"
-      />
-      <el-table-column
-        prop="money"
-        label="所需社费"
-        align="center"
-        width="100"
       >
-        <template v-slot:default="{ row }">
-          <el-tag type="success">
-            {{ row.money }} 元
-          </el-tag>
+        <template v-slot:default="{row}">
+          <el-tag v-if="row.sex">{{ '男' }}</el-tag>
+          <el-tag v-else>{{ '女' }}</el-tag>
         </template>
       </el-table-column>
       <el-table-column
+        prop="name"
+        label="姓名"
+        align="center"
+      />
+      <el-table-column
+        prop="phone"
+        label="联系电话"
+        align="center"
+        width="150"
+      />
+      <el-table-column
+        prop="unitInfo"
+        label="专业班级"
+        align="center"
+      />
+      <el-table-column
         prop="status"
-        label="状态"
+        label="加入状态"
         align="center"
         width="150"
       >
         <template v-slot="{ row }">
-          <el-tag v-if="row.status === 0" type="warning">待审核</el-tag>
-          <el-tag v-else-if="row.status === 1">审核通过</el-tag>
-          <el-tag v-else-if="row.status === 2" type="danger">审核未通过</el-tag>
-          <el-tag v-else-if="row.status === 3" type="warning">修改信息待审核</el-tag>
-          <el-tag v-else-if="row.status === 4" type="danger">已封禁</el-tag>
+          <el-tag v-if="row.clubStatus === -1" type="success">社团部长</el-tag>
+          <el-tag v-if="row.clubStatus === 0" type="warning">待审核</el-tag>
+          <el-tag v-else-if="row.clubStatus === 1">审核通过</el-tag>
+          <el-tag v-else-if="row.clubStatus === 2" type="danger">审核未通过</el-tag>
+          <el-tag v-else-if="row.clubStatus === 3" type="warning">修改信息待审核</el-tag>
+          <el-tag v-else-if="row.clubStatus === 4" type="danger">已封禁</el-tag>
         </template>
       </el-table-column>
       <el-table-column
-        prop="createdUser.name"
-        label="社团创建者"
-        align="center"
-        width="150"
-      />
-      <el-table-column
         prop="createdTime"
-        label="社团创建时间"
+        label="申请加入时间"
         align="center"
         width="180"
       />
-      <el-table-column
-        prop="memberCount"
-        label="社团总人数"
-        align="center"
-        width="150"
-      />
-      <el-table-column
-        prop="balance"
-        label="剩余资金"
-        align="center"
-        width="150"
-      >
-        <template v-slot:default="{ row }">
-          <el-tag type="success">
-            {{ row.balance }} 元
-          </el-tag>
-        </template>
-      </el-table-column>
-      <el-table-column
-        prop="appendix"
-        label="附件信息"
-        align="center"
-        width="200"
-      >
-        <template v-slot:default="{ row }">
-          <el-button
-            :disabled="row.appendix === null ||row.appendix === ''"
-            type="primary"
-            @click="onDownload(row.appendix)"
-          >点击下载
-          </el-button>
-        </template>
-      </el-table-column>
       <el-table-column
         label="操作"
         fixed="right"
@@ -111,21 +80,20 @@
         align="center"
       >
         <template v-slot:default="{ row }">
-          <el-button v-if="row.status === 4" type="success" @click="onHandleClub(row.id, 1)">解除封禁</el-button>
-          <el-button v-else-if="row.status !== 1" type="success" @click="onHandleClub(row.id, 1)">通过</el-button>
-          <el-button v-else-if="row.status === 1" type="warning" @click="onHandleClub(row.id, 4)">封禁</el-button>
-          <el-button type="primary" @click="onShowClubUserInfo(row)">查看成员</el-button>
-          <el-button type="primary" @click="onClubBalanceDetail(row)">资产详情</el-button>
+          <el-button v-if="row.joinStatus === 1 || row.joinStatus === -1" type="primary" @click="onShowClubUserInfo(row)">查看成员</el-button>
+          <el-button v-if="row.joinStatus === 1 || row.joinStatus === -1" type="primary" @click="onClubBalanceDetail(row)">资产详情</el-button>
           <el-popconfirm
             style="margin-left: 0.6rem"
             confirm-button-text="删除"
             cancel-button-text="取消"
             icon="el-icon-info"
             icon-color="red"
-            title="你确定要删除该社团吗？"
+            title="你确定要删除该成员吗？？"
             @confirm="onRemove(row.id)"
           >
-            <el-button slot="reference" type="danger">删除</el-button>
+            <el-button slot="reference" type="danger">
+              {{ '删除' }}
+            </el-button>
           </el-popconfirm>
         </template>
       </el-table-column>
@@ -152,7 +120,7 @@
             <el-input v-model="form.description" type="textarea" placeholder="请输入社团介绍内容！" maxlength="200" />
           </el-form-item>
           <el-form-item label="社长" prop="createdBy">
-            <el-select v-model="form.createdBy" clearable filterable placeholder="请选择社长" style="width: 100%">
+            <el-select v-model="form.createdBy" clearable filterable placeholder="请选择社长" style="width: 100%" :disabled="true">
               <el-option
                 v-for="item in userList"
                 :key="item.id"
@@ -198,131 +166,6 @@
         <el-button type="primary" @click="onSaveClub">添 加</el-button>
       </span>
     </el-dialog>
-
-    <el-dialog
-      :title="showClubTitle"
-      :visible.sync="showClubUserDialogVisible"
-      width="60%"
-      :before-close="handleClose"
-    >
-      <el-table
-        :data="showClubUserList"
-        border
-        style="width: 100%"
-      >
-        <el-table-column
-          prop="name"
-          label="姓名"
-          width="180"
-          align="center"
-        />
-        <el-table-column
-          prop="sex"
-          label="性别"
-          width="180"
-          align="center"
-        >
-          <template v-slot:default="{ row }">
-            <el-tag type="primary">{{ row.sex ? '男' : '女' }}</el-tag>
-          </template>
-        </el-table-column>
-        <el-table-column
-          prop="unitInfo"
-          label="班级信息"
-          align="center"
-        />
-        <el-table-column
-          prop="clubStatus"
-          label="加入状态"
-          align="center"
-        >
-          <template v-slot:default="{ row }">
-            <el-tag v-if="row.clubStatus === -1" type="success">社团部长</el-tag>
-            <el-tag v-if="row.clubStatus === 0" type="warning">申请中</el-tag>
-            <el-tag v-if="row.clubStatus === 1" type="primary">社员</el-tag>
-            <el-tag v-if="row.clubStatus === 2" type="danger">拒绝</el-tag>
-            <el-tag v-if="row.clubStatus === 3" type="danger">退出</el-tag>
-          </template>
-        </el-table-column>
-        <el-table-column
-          label="操作"
-          align="center"
-          width="300"
-        >
-          <template v-slot:default="{ row }">
-            <el-button v-if="row.clubStatus !== -1 && row.clubStatus !== 0" type="danger" @click="onRemoveClubUser(row.id)">删除</el-button>
-            <el-button v-if="row.clubStatus === 0" type="success" @click="onHandleUserJoinClub(row, 1)">通过</el-button>
-            <el-button v-if="row.clubStatus === 0" type="warning" @click="onHandleUserJoinClub(row,2)">驳回</el-button>
-          </template>
-        </el-table-column>
-      </el-table>
-      <el-pagination
-        background
-        layout="prev, pager, next"
-        :total="showUserTotal"
-        style="margin-top: 1rem; text-align: right"
-        @current-change="handleCurrentChangeShowClubUser"
-      />
-      <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="handleClose">关 闭</el-button>
-      </span>
-    </el-dialog>
-
-    <el-dialog
-      title="资产详情"
-      :visible.sync="balanceDetailVisible"
-      width="60%"
-      :before-close="handleClose"
-    >
-      <el-table
-        :data="balanceDetailList"
-        border
-        style="width: 100%"
-      >
-        <el-table-column
-          prop="userName"
-          label="成员"
-          width="180"
-          align="center"
-        />
-        <el-table-column
-          prop="amount"
-          label="交易金额"
-          width="180"
-          align="center"
-        >
-          <template v-slot:default="{ row }">
-            <el-tag v-if="row.amount < 0" type="danger"> {{ row.amount }}元 </el-tag>
-            <el-tag v-else type="primary"> {{ row.amount }}元 </el-tag>
-          </template>
-        </el-table-column>
-        <el-table-column
-          prop="balance"
-          label="余额"
-          align="center"
-        >
-          <template v-slot:default="{ row }">
-            <el-tag v-if="row.amount < 100" type="danger"> {{ row.balance }}元 </el-tag>
-            <el-tag v-else type="primary"> {{ row.balance }}元 </el-tag>
-          </template>
-        </el-table-column>
-        <el-table-column
-          prop="remark"
-          label="备注"
-          align="center"
-        />
-      </el-table>
-      <el-pagination
-        background
-        layout="prev, pager, next"
-        :total="showUserTotal"
-        style="margin-top: 1rem; text-align: right"
-        @current-change="handleCurrentChangeBalanceDetail"
-      />
-      <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="handleClose">关 闭</el-button>
-      </span>
-    </el-dialog>
   </div>
 </template>
 
@@ -333,14 +176,14 @@ import axios from 'axios'
 import { getToken } from '@/utils/auth'
 import {
   getClubBalance,
-  getClubList,
-  handleUserJoinClub,
+  getMyClubUser,
   modifyClubStatus,
   removeClub,
   removeClubUser,
   saveOrUpdateClub
 } from '@/api/club'
 import { uploadFile } from '@/api/public'
+import store from '@/store'
 
 export default {
   data() {
@@ -350,7 +193,8 @@ export default {
         pageSize: 10,
         dict: null,
         query: '',
-        role: 'user'
+        role: 'user',
+        isAdmin: true
       },
       form: {
         name: '',
@@ -373,28 +217,10 @@ export default {
         query: '',
         clubId: null
       },
-      balancePage: {
-        pageNumber: 1,
-        pageSize: 10,
-        query: '',
-        clubId: null
-      },
       balanceDetailList: [],
       balanceDetailVisible: false,
       showUserTotal: 0,
-      userList: [],
-      rules: {
-        name: [
-          { required: true, message: '请输入社团名称', trigger: 'blur' },
-          { min: 3, max: 50, message: '长度在 3 到 50 个字符', trigger: 'blur' }
-        ],
-        description: [
-          { required: true, message: '请输入社团介绍', trigger: 'blur' }
-        ],
-        money: [
-          { required: true, message: '请输入所需社费金额', trigger: 'blur' }
-        ]
-      }
+      userList: []
     }
   },
   created() {
@@ -405,7 +231,7 @@ export default {
     getList(current = 1) {
       this.tableLoading = true
       this.pageParam.pageNumber = current
-      getClubList(this.pageParam).then(res => {
+      getMyClubUser(this.pageParam).then(res => {
         this.tableData = res.data.records
         this.total = res.data.total
         this.tableLoading = false
@@ -426,11 +252,18 @@ export default {
         this.treeOption = res.data
       })
     },
-    onRemove(val) {
-      removeClub({ id: val }).then(res => {
-        // 刷新页面
-        this.getList(this.pageParam.pageNumber)
-      })
+    onRemove(val, status) {
+      // 删除社团
+      if (status === -1) {
+        removeClub({ id: val }).then(res => {
+          // 刷新页面
+          this.getList(this.pageParam.pageNumber)
+        })
+      } else {
+        modifyClubStatus({ id: val, status: 3 }).then(res => {
+          this.getList(this.pageParam.pageNumber)
+        })
+      }
     },
     onHandleClub(val, status) {
       modifyClubStatus({ id: val, status: status }).then(res => {
@@ -441,6 +274,8 @@ export default {
       this.dialogVisible = true
       getUserList({ pageNumber: 1, pageSize: 10000, role: 'user' }).then(res => {
         this.userList = res.data.records
+        this.form.createdBy = store.getters.userId
+        console.log(this.form.createdBy)
       })
     },
     handleClose() {
@@ -552,12 +387,6 @@ export default {
     },
     onRemoveClubUser(val) {
       removeClubUser({ clubId: this.showClubInfoPage.clubId, userId: val }).then(() => {
-        this.getShowUserList(this.showClubInfoPage.pageNumber)
-      })
-    },
-    onHandleUserJoinClub(val, status) {
-      handleUserJoinClub({ id: val.id, status: status }).then(res => {
-        this.$message.success('操作成功')
         this.getShowUserList(this.showClubInfoPage.pageNumber)
       })
     },

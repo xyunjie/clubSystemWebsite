@@ -183,19 +183,19 @@ export const asyncRoutes = [
       {
         path: 'finance',
         name: 'clubFinance',
-        component: () => import('@/views/system/systemNotice.vue'),
+        component: () => import('@/views/my/clubBalance.vue'),
         meta: { title: '社团财务', icon: 'el-icon-help' }
       },
       {
         path: 'admin',
         name: 'myClubAdmin',
-        component: () => import('@/views/system/systemNotice.vue'),
+        component: () => import('@/views/my/myClubAdmin.vue'),
         meta: { title: '管理我的社团', icon: 'el-icon-help' }
       },
       {
         path: 'warning',
         name: 'myClubWarning',
-        component: () => import('@/views/system/systemNotice.vue'),
+        component: () => import('@/views/my/clubWarning.vue'),
         meta: { title: '社团警告', icon: 'el-icon-help' }
       }
     ]

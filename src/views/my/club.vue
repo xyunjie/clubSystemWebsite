@@ -8,6 +8,11 @@
         <el-button type="primary" @click="onSubmit">查询</el-button>
       </el-form-item>
     </el-form>
+    <div>
+      <div style="margin-left: auto; float: right; margin-bottom: 0.5rem">
+        <el-button style="" type="primary" @click="onAddClub">新增</el-button>
+      </div>
+    </div>
     <el-table
       :data="tableData"
       border
@@ -58,6 +63,20 @@
           <el-tag v-else-if="row.joinStatus === 2" type="danger">审核未通过</el-tag>
           <el-tag v-else-if="row.joinStatus === 3" type="warning">修改信息待审核</el-tag>
           <el-tag v-else-if="row.joinStatus === 4" type="danger">已封禁</el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column
+        prop="status"
+        label="社团审核状态"
+        align="center"
+        width="180"
+      >
+        <template v-slot="{ row }">
+          <el-tag v-if="row.status === 0" type="warning">待审核</el-tag>
+          <el-tag v-else-if="row.status === 1">审核通过</el-tag>
+          <el-tag v-else-if="row.status === 2" type="danger">审核未通过</el-tag>
+          <el-tag v-else-if="row.status === 3" type="warning">修改信息待审核</el-tag>
+          <el-tag v-else-if="row.status === 4" type="danger">已封禁</el-tag>
         </template>
       </el-table-column>
       <el-table-column
@@ -115,7 +134,7 @@
             icon="el-icon-info"
             icon-color="red"
             :title="row.joinStatus === -1 ? '你确定要解散该社团吗？？' : '你确定要退出该社团吗？？'"
-            @confirm="onRemove(row.id)"
+            @confirm="onRemove(row.id, row.joinStatus)"
           >
             <el-button slot="reference" type="danger">
               {{ row.joinStatus === -1 ? '解散' : '退出' }}
@@ -146,7 +165,7 @@
             <el-input v-model="form.description" type="textarea" placeholder="请输入社团介绍内容！" maxlength="200" />
           </el-form-item>
           <el-form-item label="社长" prop="createdBy">
-            <el-select v-model="form.createdBy" clearable filterable placeholder="请选择社长" style="width: 100%">
+            <el-select v-model="form.createdBy" clearable filterable placeholder="请选择社长" style="width: 100%" :disabled="true">
               <el-option
                 v-for="item in userList"
                 :key="item.id"
@@ -331,6 +350,7 @@ import {
   saveOrUpdateClub
 } from '@/api/club'
 import { uploadFile } from '@/api/public'
+import store from '@/store'
 
 export default {
   data() {
@@ -341,7 +361,7 @@ export default {
         dict: null,
         query: '',
         role: 'user',
-        isAdmin: false
+        isAdmin: true
       },
       form: {
         name: '',
@@ -377,7 +397,7 @@ export default {
       rules: {
         name: [
           { required: true, message: '请输入社团名称', trigger: 'blur' },
-          { min: 3, max: 5, message: '长度在 3 到 50 个字符', trigger: 'blur' }
+          { min: 3, max: 50, message: '长度在 3 到 50 个字符', trigger: 'blur' }
         ],
         description: [
           { required: true, message: '请输入社团介绍', trigger: 'blur' }
@@ -417,11 +437,18 @@ export default {
         this.treeOption = res.data
       })
     },
-    onRemove(val) {
-      removeClub({ id: val }).then(res => {
-        // 刷新页面
-        this.getList(this.pageParam.pageNumber)
-      })
+    onRemove(val, status) {
+      // 删除社团
+      if (status === -1) {
+        removeClub({ id: val }).then(res => {
+          // 刷新页面
+          this.getList(this.pageParam.pageNumber)
+        })
+      } else {
+        modifyClubStatus({ id: val, status: 3 }).then(res => {
+          this.getList(this.pageParam.pageNumber)
+        })
+      }
     },
     onHandleClub(val, status) {
       modifyClubStatus({ id: val, status: status }).then(res => {
@@ -432,6 +459,8 @@ export default {
       this.dialogVisible = true
       getUserList({ pageNumber: 1, pageSize: 10000, role: 'user' }).then(res => {
         this.userList = res.data.records
+        this.form.createdBy = store.getters.userId
+        console.log(this.form.createdBy)
       })
     },
     handleClose() {

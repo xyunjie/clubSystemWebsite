@@ -62,3 +62,10 @@ export function getHotActivity() {
     method: 'get'
   })
 }
+
+export function getClubWarning() {
+  return request({
+    url: '/api/activity/getClubWarning',
+    method: 'get'
+  })
+}

@@ -243,7 +243,8 @@ export default {
         pageSize: 10,
         id: null,
         kind: 'activity',
-        query: ''
+        query: '',
+        isAdmin: true
       },
       activityUserListParam: {
         pageNumber: 1,
