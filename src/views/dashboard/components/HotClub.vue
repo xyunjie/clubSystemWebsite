@@ -55,8 +55,9 @@
     <el-dialog
       :title="showClubTitle"
       :visible.sync="dialogVisible"
-      width="80%"
+      width="100%"
       :before-close="handleClose"
+      :fullscreen="true"
     >
       <ClubInfo :club-id="showClubInfo.id" />
       <span slot="footer" class="dialog-footer">

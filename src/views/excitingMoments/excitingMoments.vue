@@ -3,7 +3,11 @@
     <el-button type="primary" style="" @click="onAddExcitingMoments">添加精彩瞬间</el-button>
     <div class="card-container">
       <el-card v-for="item in resultData" :key="item.id" :body-style="{ padding: '0px' }" style="margin: 10px 10px 20px;">
-        <img :src="item.url" class="image" style="width: 300px; height: 230px">
+        <el-image
+          style="width: 300px; height: 160px"
+          :src="item.url"
+          fit="contain"
+        />
         <div style="padding: 14px;">
           <div class="bottom clearfix">
             <el-button type="text" class="button" @click="remove(item.id)">删除</el-button>
@@ -33,7 +37,7 @@
         <el-button slot="trigger" size="small" type="primary" :disabled="fileList.length >= 1">点击上传
         </el-button>
         <div slot="tip" class="el-upload__tip" style="font-size: 14px">
-          推荐图片大小：750*500
+          推荐图片大小：750*400
         </div>
       </el-upload>
       <span slot="footer" class="dialog-footer">

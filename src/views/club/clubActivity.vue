@@ -107,7 +107,7 @@
       <el-table-column
         label="操作"
         fixed="right"
-        width="380"
+        width="450"
         align="center"
       >
         <template v-slot:default="{ row }">

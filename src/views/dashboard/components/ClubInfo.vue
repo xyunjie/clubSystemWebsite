@@ -101,6 +101,7 @@
           background
           layout="prev, pager, next"
           :total="activityTotal"
+          :page-size="pageParam.pageSize"
           style="margin-top: 1rem; text-align: right"
           @current-change="handleCurrentChange"
         />
@@ -127,7 +128,7 @@ export default {
       clubInfo: {},
       pageParam: {
         pageNumber: 1,
-        pageSize: 10,
+        pageSize: 3,
         id: null,
         kind: 'activity',
         query: '',
