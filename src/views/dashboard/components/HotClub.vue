@@ -130,6 +130,7 @@ export default {
         this.$message.success('申请加入成功！')
         this.handleClose()
       })
+      this.innerVisible = false
     }
   }
 }
