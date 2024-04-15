@@ -232,6 +232,25 @@ export const asyncRoutes = [
       }
     ]
   },
+  {
+    path: '/excitingMoments',
+    component: Layout,
+    redirect: '/excitingMoments/list',
+    alwaysShow: true,
+    name: '精彩瞬间',
+    meta: {
+      title: '精彩瞬间',
+      icon: 'el-icon-s-home'
+    },
+    children: [
+      {
+        path: 'list',
+        name: 'excitingMoments',
+        component: () => import('@/views/excitingMoments/excitingMoments.vue'),
+        meta: { title: '精彩瞬间', icon: 'el-icon-help' }
+      }
+    ]
+  },
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }
 ]
