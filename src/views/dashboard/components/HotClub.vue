@@ -59,7 +59,7 @@
       :before-close="handleClose"
       :fullscreen="true"
     >
-      <ClubInfo :club-id="showClubInfo.id" />
+      <ClubInfo :club-id="showClubId" />
       <span slot="footer" class="dialog-footer">
         <el-button type="primary" @click="userJoin()">申请加入</el-button>
         <el-button @click="handleClose">关 闭</el-button>
@@ -93,7 +93,8 @@ export default {
       dialogVisible: false,
       innerVisible: false,
       showClubInfo: {},
-      showClubTitle: '学生组织详情'
+      showClubTitle: '学生组织详情',
+      showClubId: null
     }
   },
   created() {
@@ -108,9 +109,9 @@ export default {
     async handleClick(val) {
       console.log(val)
       this.showClubTitle = val.name
-      await getClubDetail({ id: val.id }).then(res => {
-        this.showClubInfo = res.data
-      })
+      this.showClubId = val.id
+      const res = await getClubDetail({ id: val.id })
+      this.showClubInfo = res.data
       this.dialogVisible = true
     },
     handleClose() {

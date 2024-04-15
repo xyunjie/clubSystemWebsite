@@ -146,6 +146,12 @@ export default {
       this.getActivityList()
     }
   },
+  created() {
+    // console.log(this.clubId)
+    this.getExciting()
+    this.getClubInfo()
+    this.getActivityList()
+  },
   methods: {
     getExciting() {
       getByClubIdExcitingMomentsList({ id: this.clubId }).then(res => {
