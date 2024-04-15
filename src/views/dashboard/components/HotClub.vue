@@ -53,47 +53,14 @@
       </el-table>
     </el-card>
     <el-dialog
-      title="学生组织详情"
+      :title="showClubTitle"
       :visible.sync="dialogVisible"
-      width="45%"
+      width="80%"
       :before-close="handleClose"
     >
-      <el-descriptions class="margin-top" :column="3" border>
-        <template slot="extra">
-          <el-button type="primary" size="small" @click="userJoin()">申请加入</el-button>
-        </template>
-        <el-descriptions-item>
-          <template slot="label">
-            学生组织名称
-          </template>
-          {{ showClubInfo.name }}
-        </el-descriptions-item>
-        <el-descriptions-item>
-          <template slot="label">
-            学生组织部长
-          </template>
-          {{ showClubInfo.createdName }}
-        </el-descriptions-item>
-        <el-descriptions-item>
-          <template slot="label">
-            加入所需费用
-          </template>
-          {{ showClubInfo.money }}
-        </el-descriptions-item>
-        <el-descriptions-item>
-          <template slot="label">
-            学生组织描述
-          </template>
-          {{ showClubInfo.description }}
-        </el-descriptions-item>
-        <el-descriptions-item>
-          <template slot="label">
-            创建时间
-          </template>
-          {{ showClubInfo.createdTime }}
-        </el-descriptions-item>
-      </el-descriptions>
+      <ClubInfo :club-id="showClubInfo.id" />
       <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="userJoin()">申请加入</el-button>
         <el-button @click="handleClose">关 闭</el-button>
       </span>
       <el-dialog
@@ -113,16 +80,19 @@
 
 <script>
 import { getClubDetail, getHotClub, userJoinClub } from '@/api/club'
+import ClubInfo from '@/views/dashboard/components/ClubInfo.vue'
 import store from '@/store'
 
 export default {
   name: 'HotClub',
+  components: { ClubInfo },
   data() {
     return {
       hotClubList: [],
       dialogVisible: false,
       innerVisible: false,
-      showClubInfo: {}
+      showClubInfo: {},
+      showClubTitle: '学生组织详情'
     }
   },
   created() {
@@ -136,10 +106,10 @@ export default {
     },
     async handleClick(val) {
       console.log(val)
+      this.showClubTitle = val.name
       await getClubDetail({ id: val.id }).then(res => {
         this.showClubInfo = res.data
       })
-      console.log(this.showClubInfo)
       this.dialogVisible = true
     },
     handleClose() {

@@ -8,6 +8,14 @@ export function getExcitingMomentsList(data) {
   })
 }
 
+export function getByClubIdExcitingMomentsList(data) {
+  return request({
+    url: '/api/exciting/listByClubId',
+    method: 'get',
+    params: data
+  })
+}
+
 export function saveExcitingMoments(data) {
   return request({
     url: '/api/exciting/save',
