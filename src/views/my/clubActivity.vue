@@ -23,7 +23,7 @@
       <el-table-column
         fixed
         prop="clubName"
-        label="社团名称"
+        label="学生组织名称"
         align="center"
         width="180"
       />
@@ -47,7 +47,7 @@
       </el-table-column>
       <el-table-column
         prop="createdUser.name"
-        label="创建者"
+        label="举办者"
         align="center"
         width="150"
       />
@@ -113,14 +113,14 @@
       @current-change="handleCurrentChange"
     />
     <el-dialog
-      title="添加社团公告"
+      title="举办活动"
       :visible.sync="dialogVisible"
       width="50%"
       :before-close="handleClose"
     >
       <el-form ref="activityForm" :model="activityForm" :rules="rules" label-width="180px" class="demo-ruleForm">
-        <el-form-item label="选择社团" prop="clubId">
-          <el-select v-model="activityForm.clubId" placeholder="请选择活动社团" style="width: 80%">
+        <el-form-item label="选择学生组织" prop="clubId">
+          <el-select v-model="activityForm.clubId" placeholder="请选择举办活动的学生组织" style="width: 80%">
             <el-option v-for="(item) in clubOption" :key="item.key" :label="item.key" :value="item.value" />
           </el-select>
         </el-form-item>
@@ -172,7 +172,7 @@
         />
         <el-table-column
           prop="user.studentId"
-          label="学号/账号"
+          label="学号"
           width="140"
           align="center"
         />
@@ -275,7 +275,7 @@ export default {
           { required: true, message: '请输入公告内容', trigger: 'blur' }
         ],
         clubId: [
-          { required: true, message: '请选择要公告的社团', trigger: 'blur' }
+          { required: true, message: '请选择要公告的学生组织', trigger: 'blur' }
         ],
         beginTime: [
           { required: true, message: '请选择开始时间', trigger: 'blur' }

@@ -24,7 +24,7 @@
       <el-table-column
         fixed
         prop="clubName"
-        label="社团名称"
+        label="学生组织名称"
         align="center"
         width="180"
       />
@@ -123,7 +123,7 @@
       @current-change="handleCurrentChange"
     />
     <el-dialog
-      title="添加社团管理员"
+      title="添加学生组织管理员"
       :visible.sync="dialogVisible"
       width="30%"
       :before-close="handleClose"
@@ -227,14 +227,14 @@ export default {
     onCloseRole(val, role) {
       modifyUserRole({ id: val, role: role }).then(res => {
         this.getList(this.pageParam.pageNumber)
-        this.$message.success(`${role !== 'user' ? '设为' : '取消'}社团管理员成功`)
+        this.$message.success(`${role !== 'user' ? '设为' : '取消'}学生组织管理员成功`)
       })
     },
     saveAddClubAdmin() {
       // 添加
       modifyUserRole({ id: this.selectUser, role: 'clubAdmin' }).then(res => {
         this.getList(this.pageParam.pageNumber)
-        this.$message.success(`'设为社团管理员成功`)
+        this.$message.success(`'设为学生组织管理员成功`)
       })
       this.getList(this.pageParam.pageNumber)
       this.dialogVisible = false
@@ -260,7 +260,7 @@ export default {
           const href = window.URL.createObjectURL(blob)
           downloadElement.href = href
           // 下载后文件名
-          downloadElement.download = fileName + '社团管理员.xlsx'
+          downloadElement.download = fileName + '学生组织管理员.xlsx'
           document.body.appendChild(downloadElement)
           // 点击下载
           downloadElement.click()

@@ -21,7 +21,7 @@
         </el-table-column>
         <el-table-column
           prop="title"
-          label="名称"
+          label="活动名称"
           align="center"
           width="180"
         />
@@ -33,7 +33,7 @@
         <el-table-column
           prop="clubName"
           align="center"
-          label="社团名称"
+          label="举办组织"
         />
         <el-table-column
           prop="beginTime"
@@ -107,7 +107,7 @@
         :visible.sync="innerVisible"
         append-to-body
       >
-        <span>确定申请加入该社团吗？</span>
+        <span>确定参加该活动吗？</span>
         <span slot="footer" class="dialog-footer">
           <el-button type="primary" @click="handleUserJoin">确 定</el-button>
           <el-button @click="innerVisible = false">取 消</el-button>

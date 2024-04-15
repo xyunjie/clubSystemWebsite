@@ -23,7 +23,7 @@
       <el-table-column
         fixed
         prop="clubName"
-        label="社团名称"
+        label="学生组织名称"
         align="center"
         width="180"
       />
@@ -121,14 +121,14 @@
       @current-change="handleCurrentChange"
     />
     <el-dialog
-      title="添加社团公告"
+      title="添加学生组织公告"
       :visible.sync="dialogVisible"
       width="50%"
       :before-close="handleClose"
     >
       <el-form ref="noticeForm" :model="noticeForm" :rules="rules" label-width="180px" class="demo-ruleForm">
-        <el-form-item label="选择社团" prop="clubId">
-          <el-select v-model="noticeForm.clubId" placeholder="请选择要公告的社团/组织" style="width: 80%">
+        <el-form-item label="选择学生组织" prop="clubId">
+          <el-select v-model="noticeForm.clubId" placeholder="请选择要公告的学生组织" style="width: 80%">
             <el-option v-for="(item) in clubOption" :key="item.key" :label="item.key" :value="item.value" />
           </el-select>
         </el-form-item>
@@ -215,7 +215,7 @@ export default {
           { required: true, message: '请输入公告内容', trigger: 'blur' }
         ],
         clubId: [
-          { required: true, message: '请选择要公告的社团', trigger: 'blur' }
+          { required: true, message: '请选择要公告的学生组织', trigger: 'blur' }
         ]
       }
     }

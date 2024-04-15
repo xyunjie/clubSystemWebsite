@@ -24,7 +24,7 @@
       <el-table-column
         fixed
         prop="clubName"
-        label="社团名称"
+        label="举办组织名称"
         align="center"
         width="180"
       />
@@ -48,7 +48,7 @@
       </el-table-column>
       <el-table-column
         prop="createdUser.name"
-        label="创建者"
+        label="举办人"
         align="center"
         width="150"
       />
@@ -156,7 +156,7 @@
         />
         <el-table-column
           prop="user.studentId"
-          label="学号/账号"
+          label="学号"
           width="140"
           align="center"
         />
@@ -344,7 +344,7 @@ export default {
           const href = window.URL.createObjectURL(blob)
           downloadElement.href = href
           // 下载后文件名
-          downloadElement.download = fileName + '社团管理员.xlsx'
+          downloadElement.download = fileName + '学生组织管理员.xlsx'
           document.body.appendChild(downloadElement)
           // 点击下载
           downloadElement.click()

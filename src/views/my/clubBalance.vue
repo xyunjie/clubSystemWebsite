@@ -23,7 +23,7 @@
       <el-table-column
         fixed
         prop="clubName"
-        label="社团名称"
+        label="学生组织名称"
         align="center"
         width="180"
       />
@@ -72,14 +72,14 @@
       @current-change="handleCurrentChange"
     />
     <el-dialog
-      title="添加社团财务明细"
+      title="添加财务明细"
       :visible.sync="dialogVisible"
       width="50%"
       :before-close="handleClose"
     >
       <el-form ref="balanceForm" :model="balanceForm" :rules="rules" label-width="180px" class="demo-ruleForm">
-        <el-form-item label="社团" prop="clubId">
-          <el-select v-model="balanceForm.clubId" placeholder="请选择要添加的社团/组织" style="width: 80%">
+        <el-form-item label="选择学生组织" prop="clubId">
+          <el-select v-model="balanceForm.clubId" placeholder="请选择要添加财务明细的学生组织" style="width: 80%">
             <el-option v-for="(item) in clubOption" :key="item.key" :label="item.key" :value="item.value" />
           </el-select>
         </el-form-item>
@@ -129,7 +129,7 @@ export default {
       },
       rules: {
         clubId: [
-          { required: true, message: '请选择要添加的社团', trigger: 'blur' }
+          { required: true, message: '请选择要添加的学生组织', trigger: 'blur' }
         ],
         amount: [
           { required: true, message: '请输入金额', trigger: 'blur' | 'change' }

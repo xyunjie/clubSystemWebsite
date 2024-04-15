@@ -11,16 +11,16 @@
           </el-form-item>
         </el-form>
       </el-tab-pane>
-      <el-tab-pane label="系统简介" name="introduction">
-        <el-form ref="systemInfoForm" :model="systemInfo" :rules="systemRules" class="demo-ruleForm">
-          <el-form-item>
-            <el-form-item label="" prop="desc">
-              <el-input v-model="systemInfo.introduction" type="textarea" placeholder="请输入系统简介！" :autosize="{ minRows: 15, maxRows: 40}" />
-            </el-form-item>
-            <el-button type="primary" style="margin-top: 1rem" @click="submitForm('systemRules')">保 存</el-button>
-          </el-form-item>
-        </el-form>
-      </el-tab-pane>
+<!--      <el-tab-pane label="系统简介" name="introduction">-->
+<!--        <el-form ref="systemInfoForm" :model="systemInfo" :rules="systemRules" class="demo-ruleForm">-->
+<!--          <el-form-item>-->
+<!--            <el-form-item label="" prop="desc">-->
+<!--              <el-input v-model="systemInfo.introduction" type="textarea" placeholder="请输入系统简介！" :autosize="{ minRows: 15, maxRows: 40}" />-->
+<!--            </el-form-item>-->
+<!--            <el-button type="primary" style="margin-top: 1rem" @click="submitForm('systemRules')">保 存</el-button>-->
+<!--          </el-form-item>-->
+<!--        </el-form>-->
+<!--      </el-tab-pane>-->
     </el-tabs>
   </el-card>
 </template>

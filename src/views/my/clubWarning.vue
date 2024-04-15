@@ -18,7 +18,7 @@
       <el-table-column
         fixed
         prop="clubName"
-        label="警告社团"
+        label="警告学生组织"
         align="center"
         width="180"
       />
@@ -60,8 +60,8 @@
       :before-close="handleClose"
     >
       <el-form ref="warningForm" :model="warningForm" :rules="rules" label-width="180px" class="demo-ruleForm">
-        <el-form-item label="警告社团/组织" prop="clubId">
-          <el-select v-model="warningForm.clubId" placeholder="请选择要警告的社团/组织" style="width: 80%">
+        <el-form-item label="警告学生组织" prop="clubId">
+          <el-select v-model="warningForm.clubId" placeholder="请选择要警告的学生组织" style="width: 80%">
             <el-option v-for="(item) in clubOption" :key="item.key" :label="item.key" :value="item.value" />
           </el-select>
         </el-form-item>
@@ -119,7 +119,7 @@ export default {
           { required: true, message: '请输入警告内容', trigger: 'blur' }
         ],
         clubId: [
-          { required: true, message: '请选择要警告的社团', trigger: 'blur' }
+          { required: true, message: '请选择要警告的学生组织', trigger: 'blur' }
         ]
       },
       tableData: [],

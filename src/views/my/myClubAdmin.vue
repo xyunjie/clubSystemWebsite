@@ -22,7 +22,7 @@
         v-loading="tableLoading"
         fixed
         prop="clubName"
-        label="社团名称"
+        label="学生组织名称"
         align="center"
         width="150"
       />
@@ -59,9 +59,9 @@
         width="150"
       >
         <template v-slot="{ row }">
-          <el-tag v-if="row.clubStatus === -1" type="success">社团部长</el-tag>
+          <el-tag v-if="row.clubStatus === -1" type="success">部长</el-tag>
           <el-tag v-if="row.clubStatus === 0" type="warning">待审核</el-tag>
-          <el-tag v-else-if="row.clubStatus === 1">审核通过</el-tag>
+          <el-tag v-else-if="row.clubStatus === 1">部员</el-tag>
           <el-tag v-else-if="row.clubStatus === 2" type="danger">审核未通过</el-tag>
           <el-tag v-else-if="row.clubStatus === 3" type="warning">修改信息待审核</el-tag>
           <el-tag v-else-if="row.clubStatus === 4" type="danger">已封禁</el-tag>
@@ -107,21 +107,21 @@
       @current-change="handleCurrentChange"
     />
     <el-dialog
-      title="添加社团"
+      title="添加学生组织"
       :visible.sync="dialogVisible"
       width="50%"
       :before-close="handleClose"
     >
       <div>
         <el-form ref="form" :model="form" label-width="80px" :rules="rules">
-          <el-form-item label="社团名称" prop="name">
-            <el-input v-model="form.name" placeholder="请输入社团名称！" maxlength="50" />
+          <el-form-item label="名称" prop="name">
+            <el-input v-model="form.name" placeholder="请输入学生组织名称！" maxlength="50" />
           </el-form-item>
-          <el-form-item label="社团介绍" prop="description">
-            <el-input v-model="form.description" type="textarea" placeholder="请输入社团介绍内容！" maxlength="200" />
+          <el-form-item label="介绍" prop="description">
+            <el-input v-model="form.description" type="textarea" placeholder="请输入介绍内容！" maxlength="200" />
           </el-form-item>
-          <el-form-item label="社长" prop="createdBy">
-            <el-select v-model="form.createdBy" clearable filterable placeholder="请选择社长" style="width: 100%" :disabled="true">
+          <el-form-item label="部长" prop="createdBy">
+            <el-select v-model="form.createdBy" clearable filterable placeholder="请选择部长" style="width: 100%" :disabled="true">
               <el-option
                 v-for="item in userList"
                 :key="item.id"
@@ -130,7 +130,7 @@
               />
             </el-select>
           </el-form-item>
-          <el-form-item label="所需社费" prop="money">
+          <el-form-item label="加入费用" prop="money">
             <el-input-number v-model="form.money" :min="0" :max="200" label="所需社费" @change="handleChange" />
           </el-form-item>
           <el-form-item label="辅助材料">

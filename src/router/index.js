@@ -84,7 +84,7 @@ export const asyncRoutes = [
         path: 'clubAdmin',
         name: 'adminClubAdmin',
         component: () => import('@/views/admin/clubAdmin.vue'),
-        meta: { title: '社团管理员管理', icon: 'user' }
+        meta: { title: '学生组织管理员管理', icon: 'user', roles: ['admin'] }
       }
     ]
   },
@@ -93,10 +93,10 @@ export const asyncRoutes = [
     component: Layout,
     redirect: '/adminClub/club',
     alwaysShow: true,
-    name: '社团/组织管理',
+    name: '学生组织管理',
     meta: {
       roles: ['clubAdmin'],
-      title: '社团/组织管理',
+      title: '学生组织管理',
       icon: 'el-icon-s-home'
     },
     children: [
@@ -104,19 +104,19 @@ export const asyncRoutes = [
         path: 'club',
         name: 'clubAdmin',
         component: () => import('@/views/club/club.vue'),
-        meta: { title: '社团管理', icon: 'el-icon-help' }
+        meta: { title: '学生组织管理', icon: 'el-icon-help' }
       },
       {
         path: 'clubNotice',
         name: 'clubNotice',
         component: () => import('@/views/club/clubNotice.vue'),
-        meta: { title: '社团公告', icon: 'user' }
+        meta: { title: '学生组织公告', icon: 'user' }
       },
       {
         path: 'clubActivity',
         name: 'clubActivity',
         component: () => import('@/views/club/clubActivity.vue'),
-        meta: { title: '社团活动', icon: 'el-icon-trophy' }
+        meta: { title: '学生组织活动', icon: 'el-icon-trophy' }
       },
       {
         path: 'clubWarning',
@@ -132,7 +132,7 @@ export const asyncRoutes = [
     redirect: '/adminSystem/system',
     name: '系统管理',
     meta: {
-      roles: ['admin', 'clubAdmin'],
+      roles: ['admin'],
       title: '系统管理',
       icon: 'el-icon-s-home'
     },
@@ -141,7 +141,7 @@ export const asyncRoutes = [
         path: 'system',
         name: 'systemAdmin',
         component: () => import('@/views/system/systemAdmin.vue'),
-        meta: { title: '系统管理', icon: 'el-icon-help' }
+        meta: { title: '关于我们', icon: 'el-icon-help' }
       },
       {
         path: 'organization',
@@ -161,10 +161,10 @@ export const asyncRoutes = [
     path: '/my',
     component: Layout,
     redirect: '/my/club',
-    name: '我的社团',
+    name: '学生组织',
     meta: {
       roles: ['user'],
-      title: '我的社团',
+      title: '学生组织',
       icon: 'el-icon-s-home'
     },
     children: [
@@ -172,31 +172,31 @@ export const asyncRoutes = [
         path: 'club',
         name: 'myClub',
         component: () => import('@/views/my/club.vue'),
-        meta: { title: '我的社团', icon: 'el-icon-sugar' }
+        meta: { title: '我的学生组织', icon: 'el-icon-sugar' }
       },
       {
         path: 'announcement',
         name: 'clubAnnouncement',
         component: () => import('@/views/my/clubNotice.vue'),
-        meta: { title: '社团公告', icon: 'el-icon-help' }
+        meta: { title: '学生组织公告', icon: 'el-icon-help' }
       },
       {
         path: 'finance',
         name: 'clubFinance',
         component: () => import('@/views/my/clubBalance.vue'),
-        meta: { title: '社团财务', icon: 'el-icon-help' }
+        meta: { title: '学生组织财务', icon: 'el-icon-help' }
       },
       {
         path: 'admin',
         name: 'myClubAdmin',
         component: () => import('@/views/my/myClubAdmin.vue'),
-        meta: { title: '管理我的社团', icon: 'el-icon-help' }
+        meta: { title: '管理我的学生组织', icon: 'el-icon-help' }
       },
       {
         path: 'warning',
         name: 'myClubWarning',
         component: () => import('@/views/my/clubWarning.vue'),
-        meta: { title: '社团警告', icon: 'el-icon-help' }
+        meta: { title: '学生组织警告', icon: 'el-icon-help' }
       }
     ]
   },
@@ -204,10 +204,10 @@ export const asyncRoutes = [
     path: '/activity',
     component: Layout,
     redirect: '/activity/list',
-    name: '社团活动',
+    name: '学生组织活动',
     meta: {
       roles: ['user'],
-      title: '社团活动',
+      title: '学生组织活动',
       icon: 'el-icon-s-home'
     },
     children: [
@@ -227,6 +227,7 @@ export const asyncRoutes = [
         path: 'wonderful',
         name: 'activityWonderful',
         component: () => import('@/views/my/clubActivityExciting.vue'),
+        hidden: true,
         meta: { title: '精彩瞬间', icon: 'el-icon-help' }
       }
     ]

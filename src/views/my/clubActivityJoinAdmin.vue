@@ -81,7 +81,7 @@
             cancel-button-text="取消"
             icon="el-icon-info"
             icon-color="red"
-            title="你确定要删除该人的报名吗？"
+            title="你确定要取消该成员的报名吗？"
             @confirm="onRemove(row.id)"
           >
             <el-button slot="reference" type="danger">删除</el-button>
@@ -140,7 +140,7 @@ export default {
           { required: true, message: '请输入公告内容', trigger: 'blur' }
         ],
         clubId: [
-          { required: true, message: '请选择要公告的社团', trigger: 'blur' }
+          { required: true, message: '请选择要公告的学生组织', trigger: 'blur' }
         ],
         beginTime: [
           { required: true, message: '请选择开始时间', trigger: 'blur' }

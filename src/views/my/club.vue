@@ -22,27 +22,27 @@
         v-loading="tableLoading"
         fixed
         prop="name"
-        label="社团名称"
+        label="学生组织名称"
         align="center"
         width="150"
       />
       <el-table-column
         prop="description"
-        label="社团介绍"
+        label="介绍"
         align="center"
         width="500"
       />
       <el-table-column
         prop="createdUser.name"
-        label="社团创建者"
+        label="创建者"
         align="center"
-        width="150"
+        width="130"
       />
       <el-table-column
         prop="money"
-        label="所需社费"
+        label="加入所需费用"
         align="center"
-        width="100"
+        width="120"
       >
         <template v-slot:default="{ row }">
           <el-tag type="success">
@@ -57,7 +57,7 @@
         width="150"
       >
         <template v-slot="{ row }">
-          <el-tag v-if="row.joinStatus === -1" type="success">社团部长</el-tag>
+          <el-tag v-if="row.joinStatus === -1" type="success">学生组织部长</el-tag>
           <el-tag v-if="row.joinStatus === 0" type="warning">待审核</el-tag>
           <el-tag v-else-if="row.joinStatus === 1">审核通过</el-tag>
           <el-tag v-else-if="row.joinStatus === 2" type="danger">审核未通过</el-tag>
@@ -67,7 +67,7 @@
       </el-table-column>
       <el-table-column
         prop="status"
-        label="社团审核状态"
+        label="学生组织审核状态"
         align="center"
         width="180"
       >
@@ -81,13 +81,13 @@
       </el-table-column>
       <el-table-column
         prop="createdTime"
-        label="社团创建时间"
+        label="创建时间"
         align="center"
         width="180"
       />
       <el-table-column
         prop="memberCount"
-        label="社团总人数"
+        label="总人数"
         align="center"
         width="150"
       />
@@ -133,7 +133,7 @@
             cancel-button-text="取消"
             icon="el-icon-info"
             icon-color="red"
-            :title="row.joinStatus === -1 ? '你确定要解散该社团吗？？' : '你确定要退出该社团吗？？'"
+            :title="row.joinStatus === -1 ? '你确定要解散该学生组织吗？？' : '你确定要退出该学生组织吗？？'"
             @confirm="onRemove(row.id, row.joinStatus)"
           >
             <el-button slot="reference" type="danger">
@@ -151,21 +151,21 @@
       @current-change="handleCurrentChange"
     />
     <el-dialog
-      title="添加社团"
+      title="创建学生组织"
       :visible.sync="dialogVisible"
       width="50%"
       :before-close="handleClose"
     >
       <div>
         <el-form ref="form" :model="form" label-width="80px" :rules="rules">
-          <el-form-item label="社团名称" prop="name">
-            <el-input v-model="form.name" placeholder="请输入社团名称！" maxlength="50" />
+          <el-form-item label="名称" prop="name">
+            <el-input v-model="form.name" placeholder="请输入名称！" maxlength="50" />
           </el-form-item>
-          <el-form-item label="社团介绍" prop="description">
-            <el-input v-model="form.description" type="textarea" placeholder="请输入社团介绍内容！" maxlength="200" />
+          <el-form-item label="介绍" prop="description">
+            <el-input v-model="form.description" type="textarea" placeholder="请输入介绍内容！" maxlength="200" />
           </el-form-item>
-          <el-form-item label="社长" prop="createdBy">
-            <el-select v-model="form.createdBy" clearable filterable placeholder="请选择社长" style="width: 100%" :disabled="true">
+          <el-form-item label="部长" prop="createdBy">
+            <el-select v-model="form.createdBy" clearable filterable placeholder="请选择部长" style="width: 100%" :disabled="true">
               <el-option
                 v-for="item in userList"
                 :key="item.id"
@@ -174,7 +174,7 @@
               />
             </el-select>
           </el-form-item>
-          <el-form-item label="所需社费" prop="money">
+          <el-form-item label="加入费用" prop="money">
             <el-input-number v-model="form.money" :min="0" :max="200" label="所需社费" @change="handleChange" />
           </el-form-item>
           <el-form-item label="辅助材料">
@@ -250,9 +250,9 @@
           align="center"
         >
           <template v-slot:default="{ row }">
-            <el-tag v-if="row.clubStatus === -1" type="success">社团部长</el-tag>
+            <el-tag v-if="row.clubStatus === -1" type="success">部长</el-tag>
             <el-tag v-if="row.clubStatus === 0" type="warning">申请中</el-tag>
-            <el-tag v-if="row.clubStatus === 1" type="primary">社员</el-tag>
+            <el-tag v-if="row.clubStatus === 1" type="primary">成员</el-tag>
             <el-tag v-if="row.clubStatus === 2" type="danger">拒绝</el-tag>
             <el-tag v-if="row.clubStatus === 3" type="danger">退出</el-tag>
           </template>
@@ -396,14 +396,14 @@ export default {
       userList: [],
       rules: {
         name: [
-          { required: true, message: '请输入社团名称', trigger: 'blur' },
+          { required: true, message: '请输入学生组织名称', trigger: 'blur' },
           { min: 3, max: 50, message: '长度在 3 到 50 个字符', trigger: 'blur' }
         ],
         description: [
-          { required: true, message: '请输入社团介绍', trigger: 'blur' }
+          { required: true, message: '请输入介绍', trigger: 'blur' }
         ],
         money: [
-          { required: true, message: '请输入所需社费金额', trigger: 'blur' }
+          { required: true, message: '请输入加入所需费用', trigger: 'blur' }
         ]
       }
     }

@@ -2,7 +2,7 @@
   <div>
     <el-card class="box-card" :body-style="{ padding: '0px' }">
       <div slot="header" class="clearfix" style="width: 100%; text-align: center">
-        <span>热门社团</span>
+        <span>热门学生组织</span>
         <el-button style="float: right; padding: 3px 0" type="text">更多</el-button>
       </div>
       <el-table
@@ -34,7 +34,7 @@
         <el-table-column
           prop="balance"
           align="center"
-          label="所需社费"
+          label="加入所需费用"
         >
           <template v-slot:default="{row}">
             <el-tag>{{ row.money }}元</el-tag>
@@ -53,7 +53,7 @@
       </el-table>
     </el-card>
     <el-dialog
-      title="社团详情"
+      title="学生组织详情"
       :visible.sync="dialogVisible"
       width="45%"
       :before-close="handleClose"
@@ -64,25 +64,25 @@
         </template>
         <el-descriptions-item>
           <template slot="label">
-            社团名称
+            学生组织名称
           </template>
           {{ showClubInfo.name }}
         </el-descriptions-item>
         <el-descriptions-item>
           <template slot="label">
-            社长
+            学生组织部长
           </template>
           {{ showClubInfo.createdName }}
         </el-descriptions-item>
         <el-descriptions-item>
           <template slot="label">
-            所需社费
+            加入所需费用
           </template>
           {{ showClubInfo.money }}
         </el-descriptions-item>
         <el-descriptions-item>
           <template slot="label">
-            社团描述
+            学生组织描述
           </template>
           {{ showClubInfo.description }}
         </el-descriptions-item>
@@ -102,7 +102,7 @@
         :visible.sync="innerVisible"
         append-to-body
       >
-        <span>确定申请加入该社团吗？</span>
+        <span>确定申请加入该学生组织吗？</span>
         <span slot="footer" class="dialog-footer">
           <el-button type="primary" @click="handleUserJoin">确 定</el-button>
           <el-button @click="innerVisible = false">取 消</el-button>
