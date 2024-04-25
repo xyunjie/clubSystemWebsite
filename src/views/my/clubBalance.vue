@@ -13,6 +13,7 @@
     <div>
       <div style="margin-left: auto; float: right; margin-bottom: 0.5rem">
         <el-button style="" type="primary" @click="onAddClubBalance">新增</el-button>
+        <el-button style="" type="primary" @click="onCountBalance">统计</el-button>
       </div>
     </div>
     <el-table
@@ -95,13 +96,40 @@
         <el-button @click="handleClose">关 闭</el-button>
       </span>
     </el-dialog>
+    <el-dialog
+      title="财务明细统计"
+      :visible.sync="dialogCountVisible"
+      width="60%"
+      :before-close="handleClose"
+    >
+      <el-date-picker
+        v-model="selectDateValue"
+        type="daterange"
+        range-separator="至"
+        start-placeholder="开始日期"
+        end-placeholder="结束日期"
+        @change="onChangeDatePicker"
+      />
+      <LineChart :chart-data="lineChartData" />
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import { getClubBalanceList, getMyClub, saveClubBalance } from '@/api/club'
+import { getBalanceCount, getClubBalanceList, getMyClub, getMyCreateClub, saveClubBalance } from '@/api/club'
+import LineChart from '@/views/my/components/LineChart.vue'
+
+const lineChartData = {
+  messages: {
+    expectedData: [200, 192, 120, 144, 160, 130, 140],
+    actualData: [180, 160, 151, 106, 145, 150, 130],
+    totalData: [50, 60, 154, 185, 100, 30, 200],
+    countData: ['10', '11', '12']
+  }
+}
 
 export default {
+  components: { LineChart },
   data() {
     return {
       pageParam: {
@@ -141,8 +169,12 @@ export default {
       tableData: [],
       total: 0,
       clubOption: [],
+      myClubInfo: {},
       activityUserList: [],
-      dialogVisible: false
+      dialogVisible: false,
+      dialogCountVisible: false,
+      selectDateValue: [],
+      lineChartData: lineChartData.messages
     }
   },
   created() {
@@ -173,6 +205,7 @@ export default {
     handleClose() {
       this.dialogVisible = false
       this.selectUser = null
+      this.dialogCountVisible = false
     },
     onGetMyAdminClub() {
       getMyClub(this.getAdminClubParam).then(res => {
@@ -183,6 +216,34 @@ export default {
           }
         })
       })
+    },
+    getBalanceCountFunc(startTime = new Date(new Date().getTime() - 10 * 24 * 60 * 60 * 1000), endTime = new Date()) {
+      // 获取前10天
+      const param = {
+        // 格式化为YYYY-MM-DD
+        startTime: startTime.toISOString().slice(0, 10),
+        endTime: endTime.toISOString().slice(0, 10),
+        clubId: this.myClubInfo.id
+      }
+      getBalanceCount(param).then(res => {
+        this.lineChartData = res.data
+      })
+    },
+    async onCountBalance() {
+      this.dialogCountVisible = true
+      const res = await getMyCreateClub()
+      if (res.code !== 200) {
+        this.$message({
+          message: res.msg,
+          type: 'error'
+        })
+        return
+      }
+      this.myClubInfo = res.data
+      await this.getBalanceCountFunc()
+    },
+    onChangeDatePicker() {
+      this.getBalanceCountFunc(this.selectDateValue[0], this.selectDateValue[1])
     },
     handleSave() {
       this.$refs['balanceForm'].validate((valid) => {

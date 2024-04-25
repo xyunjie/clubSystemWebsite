@@ -219,6 +219,7 @@
         />
       </el-table>
       <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="onExport">导出人员</el-button>
         <el-button @click="handleClose">关 闭</el-button>
       </span>
     </el-dialog>
@@ -234,6 +235,8 @@ import {
   removeActivity, saveOrUpdateActivity
 } from '@/api/activity'
 import { getMyClub } from '@/api/club'
+import { getToken } from '@/utils/auth'
+import axios from 'axios'
 
 export default {
   data() {
@@ -363,6 +366,44 @@ export default {
           return false
         }
       })
+    },
+    onExport() {
+      const token = getToken()
+      this.tableLoading = true
+      axios({
+        url: process.env.VUE_APP_BASE_API + 'api/activity/export',
+        method: 'post',
+        data: { activityId: this.activityUserListParam.activityId },
+        responseType: 'blob',
+        headers: { token: token }
+      })
+        .then((res) => {
+          // 处理返回的文件流
+          const blob = new Blob([res.data], { type: res.data.type })
+          // 获取fileName,截取content-disposition的filename；按=分割，取最后一个
+          const fileName = new Date().toLocaleDateString()
+          const downloadElement = document.createElement('a')
+          // 创建下载的链接
+          const href = window.URL.createObjectURL(blob)
+          downloadElement.href = href
+          // 下载后文件名
+          downloadElement.download = fileName + '活动成员.xlsx'
+          document.body.appendChild(downloadElement)
+          // 点击下载
+          downloadElement.click()
+          // 下载完成移除元素
+          document.body.removeChild(downloadElement)
+          // 释放blob
+          window.URL.revokeObjectURL(href)
+          this.$message.success('导出成功!')
+          this.tableLoading = false
+        })
+        .catch(error => {
+          // 请求失败处理
+          console.log(error)
+          this.$message.error('导出失败!')
+          this.tableLoading = false
+        })
     }
   }
 }

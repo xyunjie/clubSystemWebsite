@@ -116,3 +116,18 @@ export function getMyClubUser(data) {
     data
   })
 }
+
+export function getMyCreateClub() {
+  return request({
+    url: '/api/club/getMyClub',
+    method: 'get'
+  })
+}
+
+export function getBalanceCount(data) {
+  return request({
+    url: '/api/balance/count',
+    method: 'post',
+    data
+  })
+}
