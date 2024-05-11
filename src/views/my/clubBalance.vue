@@ -206,6 +206,7 @@ export default {
       this.dialogVisible = false
       this.selectUser = null
       this.dialogCountVisible = false
+      this.selectDateValue = []
     },
     onGetMyAdminClub() {
       getMyClub(this.getAdminClubParam).then(res => {

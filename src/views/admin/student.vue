@@ -106,7 +106,8 @@
       >
         <template v-slot="{ row }">
           <el-tag v-if="row.role === 'admin'" type="danger">系统管理员</el-tag>
-          <el-tag v-else-if="row.role === 'user'" type="success">用户</el-tag>
+          <el-tag v-else-if="row.role === 'user'" type="success">普通学生</el-tag>
+          <el-tag v-else-if="row.role === 'clubUser'" type="success">学生组织部长</el-tag>
           <el-tag v-else-if="row.role === 'clubAdmin'" type="warning">学生组织管理员</el-tag>
         </template>
       </el-table-column>

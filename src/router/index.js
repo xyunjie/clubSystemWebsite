@@ -163,7 +163,7 @@ export const asyncRoutes = [
     redirect: '/my/club',
     name: '学生组织',
     meta: {
-      roles: ['user'],
+      roles: ['user', 'clubUser'],
       title: '学生组织',
       icon: 'el-icon-s-home'
     },
@@ -206,7 +206,7 @@ export const asyncRoutes = [
     redirect: '/activity/list',
     name: '学生组织活动',
     meta: {
-      roles: ['user'],
+      roles: ['user', 'clubUser'],
       title: '学生组织活动',
       icon: 'el-icon-s-home'
     },
@@ -239,6 +239,7 @@ export const asyncRoutes = [
     alwaysShow: true,
     name: '精彩瞬间',
     meta: {
+      roles: ['clubUser'],
       title: '精彩瞬间',
       icon: 'el-icon-s-home'
     },

@@ -71,6 +71,12 @@
             style="width: 80%"
           />
         </el-form-item>
+        <el-form-item prop="sex" label="性别">
+          <el-radio-group v-model="userInfo.sex">
+            <el-radio-button :label="true">男</el-radio-button>
+            <el-radio-button :label="false">女</el-radio-button>
+          </el-radio-group>
+        </el-form-item>
         <el-form-item prop="grade" label="年级" required>
           <el-select v-model="userInfo.grade" placeholder="请选择入学年级！" style="width: 80%" @change="onSelectGrade">
             <el-option
@@ -241,6 +247,7 @@ export default {
       registerRules: {
         studentId: [{ required: true, trigger: 'blur', validator: validateUsername }],
         password: [{ required: true, trigger: 'blur', validator: validatePassword }],
+        sex: [{ required: true, trigger: 'blur' }],
         phone: [{ required: true, trigger: 'blur', validator: validatePhone }],
         name: [{ required: true, trigger: 'blur', validator: validateName }],
         mail: [{ required: true, trigger: 'blur', validator: validateMail }]
